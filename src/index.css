@@ -8,3 +8,8 @@
   font-family: Poppins;
   box-sizing: border-box
 }
+
+
+::-webkit-scrollbar {
+  display: none;
+}
