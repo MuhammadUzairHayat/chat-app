@@ -1,0 +1,105 @@
+.login {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    /* bottom: 0; */
+    right: 0;
+    min-height: 100vh;
+    background: url(/background.png) no-repeat center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    pointer-events: auto;
+}
+
+.logo {
+    width: max(20vw, 200px);
+}
+
+.login-form {
+    max-width: 400px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    display: grid;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    transition: all 0.5s ease-in-out;;
+}
+
+.login-head {
+    color: #3498db;
+}
+
+.login-input-div {
+    width: 100%;
+    display: grid;
+    flex-direction: column;
+    gap: 15px;
+    transition: all 0.5s ease-in-out;
+}
+
+.login-input {
+    width: 100%;
+    padding-block: 7px;
+    padding-inline: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 14px;
+}
+
+.login-input:focus {
+    border: 1px solid #3498db;
+}
+
+.login-terms {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.login-terms input {
+flex: 1;
+}
+
+.login-terms label {
+    font-size: 14px;
+    color: #494646
+}
+
+.login-button {
+    width: 100%;
+    background: #3498db;
+    color: #fff;
+    padding-block: 8px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.login-forgot {
+    color: #494646;
+    font-size: 14px;
+}
+
+.login-forgot span {
+    text-decoration: underline;
+    cursor: pointer;
+    margin-left: 5px;
+    color: #3498db;
+}
+
+@media screen and (max-width: 450px) {
+    .login {
+        flex-direction: column;
+        padding-block: 5rem;
+        gap: 4rem;
+    }
+    
+}
