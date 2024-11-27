@@ -1,0 +1,129 @@
+.ls {
+    background-color: #8a2be2;
+    height: 100vh;
+    /* overflow-y: hidden; */
+}
+
+.ls-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    padding: 15px;
+    color: white;
+    flex-shrink: 0;
+}
+
+.ls-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.ls-logo {
+    max-width: 120px;
+    cursor: pointer;
+}
+
+.ls-menu-icon {
+    max-width: 20px;
+    cursor: pointer;
+}
+
+.ls-search {
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    border-radius: 5px;
+    background-color: #56028f;
+    color: #dbdee0;
+    font-size: 14px;
+    border: none;
+    padding: 10px 10px;
+    width: 100%;
+}
+
+.ls-search input {
+    flex: 1;
+    padding: 0 10px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: #dbdee0;
+}
+
+.ls-search img {
+    width: 20px;
+    height: 20px;
+    aspect-ratio: 1/1;
+    object-fit:fill;
+}
+
+.ls-main {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    overflow-x: hidden;
+    margin-top: 2rem;
+    overflow-y: auto;
+    max-height: 76%;
+    padding-bottom: 10%;
+
+}
+
+@media screen and (min-height: 480px) and (max-height: 590px) {
+    .ls-main {
+        max-height: 68%;
+    }
+}
+
+@media screen and (min-height: 378) and (max-height: 480px) {
+    .ls-main {
+        max-height: 60%;
+    }
+}
+
+@media screen and (max-height: 378px) {
+    .ls-main {
+        max-height: 50%;
+    }
+}
+
+
+.ls-each-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-block: 3px;
+    margin-left: 5px;
+    width: 100%;
+    /* border: 1px solid #9c12f8; */
+    box-shadow: 1px 15px 20px 2px rgba(0, 0, 0, 0.1);
+    border-top-left-radius: 3rcap;
+    border-bottom-left-radius: 3rcap;
+}
+
+.ls-each-profile:hover {
+    background-color: rgba(255, 255, 255, 0.048);
+}
+
+.ls-profile-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-left: 3px;
+}
+
+.ls-profile-info {
+    color: floralwhite;
+    line-height: 0;
+}
+
+.ls-profile-info p{
+    font-size: 13px;
+    color: rgb(219, 218, 216);
+    text-wrap: nowrap;
+}

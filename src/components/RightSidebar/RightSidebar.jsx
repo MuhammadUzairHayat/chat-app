@@ -4,7 +4,7 @@ import React from 'react'
 const RightSidebar = () => {
   return (
     <div>
-      
+      This is the right sidebar
     </div>
   )
 }

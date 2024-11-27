@@ -1,4 +1,18 @@
 .chat {
     display: grid;
     grid-auto-flow: column;
+    place-items: center;
+}
+
+.chat-container {
+    overflow-y: hidden;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    width: 100%;
+    background-color: aquamarine;
 }
