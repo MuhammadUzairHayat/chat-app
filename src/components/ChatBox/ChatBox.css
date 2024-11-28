@@ -13,7 +13,8 @@
   justify-content: space-between;
   font-size: 14px;
   border-bottom: 1px solid gainsboro;
-  padding-bottom: 10px;;
+  padding-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .chat-user img {
@@ -50,7 +51,7 @@
 
 .chat-message {
   margin-bottom: 10px;
-  padding-block: 30px;
+  padding-block: 20px;
   border-radius: 5px;
   overflow-y: scroll;
   height: calc(100vh - 8rem);
@@ -77,7 +78,7 @@
 }
 
 .chat-message-s .chat-message-content .msg{
-    background-color: rgb(126, 0, 230);
+    background-color: #077eff;
   border-bottom-left-radius: 10px;
 }
 
