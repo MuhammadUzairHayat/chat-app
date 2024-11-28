@@ -8,3 +8,17 @@
   font-family: Poppins;
   box-sizing: border-box
 }
+
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.active-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #3498db;
+  margin-right: 5px;
+}
+
