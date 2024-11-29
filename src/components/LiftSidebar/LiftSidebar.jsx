@@ -28,7 +28,7 @@ const LiftSidebar = () => {
                   alt=""
                 />
                 <div className="ls-profile-info">
-                  <h4>John Doe {index}</h4>
+                  <h1>John Doe {index}</h1>
                   <p>Software Engineer</p>
                 </div>
                 {/* Uncomment the following if needed */}

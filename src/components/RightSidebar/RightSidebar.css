@@ -1,0 +1,119 @@
+.rs {
+    display: flex;
+    flex-direction: column;
+}
+
+.rs-user-bio {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-block: 30px;
+    padding-inline: 10px;
+    background-color: #56028f;;
+    border: none;
+}
+
+.rs-user-bio::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 30px;
+    bottom: -29px;
+    background-color: #56028f;
+}
+
+.rs-bio-img {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 50%;
+    border-bottom: 10px;
+}
+
+.rs-bio-name {
+    color: floralwhite;
+    margin-top: 20px;
+    margin-bottom: 0;
+    font-weight: 500;
+}
+
+.rs-bio-desc {
+    font-size: 11px;
+    color: rgb(179, 177, 174);
+    text-wrap: wrap;
+    margin-top: 10px;
+    text-align: center;
+    max-width: 85%;
+}
+
+.rs-media {
+    position: relative;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    background-color: #56028f;
+    border: none;
+    flex: 1;
+    max-height: calc(100vh - 15.4rem) ;
+    /* overflow-y: auto; */
+    padding-bottom: 20px;
+    border-top: 3px solid white;
+    /* border-left: 3px solid #56028f;
+    border-right: 3px solid #56028f; */
+}
+
+.rs-media h4 {
+    position: sticky;
+    top:-6px;
+    padding: 1rem 12px; 
+    color: white;
+    background-color: #56028f;
+    margin: 0;
+    margin-top: 7px;
+    font-weight: 500;
+
+}
+
+.rs-media-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 6px;
+    place-items: center;
+    justify-content: center;
+    padding-inline: 12px;
+    max-height: calc(100vh - 20rem);
+    overflow-y: scroll;
+}
+
+.rs-media-items img {
+    max-width: 100%;
+    max-height: 100%;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.rs-logout-div {
+    position: absolute; /* Positioned relative to the parent container */
+    bottom: 10px; /* Fixed 10px from the bottom of the container */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); 
+    justify-self:center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rs-logout-btn {
+    background-color: rgb(1, 142, 185);
+    color: white;
+    padding: 10px 50px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.rs-logout-btn:hover {
+    /* background-color: #56028f; */
+    opacity: .95;
+}

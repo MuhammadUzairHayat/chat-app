@@ -16,6 +16,7 @@ import menu_icon from './menu_icon.png'
 import arrow_icon from './arrow_icon.png'
 import green_dot from './green_dot.png'
 import info_icon from './infoicon.png'
+import bilal_img from './Bilal.jpg'
 
 const assets = {
     avatar_icon,
@@ -36,6 +37,7 @@ const assets = {
     arrow_icon,
     green_dot,
     info_icon,
+    bilal_img,
 }
 
 export default assets;

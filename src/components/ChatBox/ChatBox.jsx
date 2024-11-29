@@ -33,10 +33,10 @@ const ChatBox = () => {
         <div className="chat-message-s">
           <div className="chat-message-content">
             <div className="chat-avatar-time">
-              <img src={assets.profile_img} alt="" />
-              <span className="chat-time">12:31 PM</span>
-            </div>
+              <img className="msg-avatar" src={assets.profile_img} alt="" />
             <p className="msg">I am doing well, thank you! How about you? </p>
+            </div>
+              <span className="chat-time">12:31 PM</span>
           </div>
         </div>
 
@@ -44,10 +44,10 @@ const ChatBox = () => {
           <div className="chat-message-s">
             <div className="chat-message-content">
               <div className="chat-avatar-time">
-                <img src={assets.profile_img} alt="" />
-                <span className="chat-time">12:31 PM</span>
+                <img className="msg-avatar" src={assets.profile_img} alt="" />
+                <img className="send-img" src={assets.pic1} alt="" />
               </div>{" "}
-              <img className="send-img" src={assets.pic1} alt="" />
+                <span className="chat-time">12:31 PM</span>
             </div>
           </div>
 
@@ -55,15 +55,15 @@ const ChatBox = () => {
           <div className="chat-message-r">
             <div className="chat-message-content">
               <div className="chat-avatar-time">
-                <img src={assets.profile_img} alt="" />
-                <span className="chat-time">12:31 PM</span>
-              </div>
+                <img className="msg-avatar" src={assets.profile_img} alt="" />
               <p className="msg">
                 I am doing well, thank you! How about you? Lorem ipsum dolor sit
                 amet, consectetur adipisicing elit. Ad minima ratione ducimus
                 reprehenderit expedita libero. Doloribus quibusdam sit
                 laudantium necessitatibus?
               </p>
+              </div>
+                <span className="chat-time">12:31 PM</span>
             </div>
           </div>
 
@@ -71,10 +71,10 @@ const ChatBox = () => {
         <div className="chat-message-r">
           <div className="chat-message-content">
             <div className="chat-avatar-time">
-              <img src={assets.profile_img} alt="" />
-              <span className="chat-time">12:31 PM</span>
-            </div>
+              <img className="msg-avatar" src={assets.profile_img} alt="" />
             <img className="receive-img" src={assets.pic2} alt="" />
+            </div>
+              <span className="chat-time">12:31 PM</span>
           </div>
         </div>
       </div>

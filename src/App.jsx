@@ -7,7 +7,7 @@ import ProfileUpdate from "./Pages/ProfileUpdate/ProfileUpdate"
 
 const App = () => {
   return (
-    <div className='bg-black'>
+    <div className=''>
       <BrowserRouter>
       <Routes>
         <Route path='/'  element={<Login />} />
