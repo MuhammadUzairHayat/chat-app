@@ -11,6 +11,22 @@ const LiftSidebar = () => {
           <div className="ls-nav">
             <img className="ls-logo" src={assets.logo} alt="" />
             <img className="ls-menu-icon" src={assets.menu_icon} alt="" />
+            <div className="ls-dropdown-menu shadow-lg">
+              <ul>
+                <li>
+                  <a href="">
+                    <img className="ls-icon" src={assets.home_icon} alt="" />
+                    <p>Edit Profile</p>
+                  </a>
+                </li>
+                <li>
+                  <a href="">
+                    <img className="ls-icon" src={assets.logout_icon} alt="" />
+                    <p>Logout</p>
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
           <div className="ls-search">
             <img className="ls-search-icon" src={assets.search_icon} alt="" />

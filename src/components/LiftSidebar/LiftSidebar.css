@@ -19,6 +19,7 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    position: relative;
 }
 
 .ls-logo {
@@ -29,6 +30,47 @@
 .ls-menu-icon {
     max-width: 20px;
     cursor: pointer;
+}
+
+.ls-dropdown-menu {
+    position: absolute;
+    background-color: white;
+    top: 100%;
+    right: 0;
+    padding: .5rem 1rem;
+    border-radius: 5px;
+    color: black;
+    font-size: 12px;
+    display: none;
+    margin-top: -5px;
+    margin-right: 5px;
+}
+
+.ls-menu-icon:hover + .ls-dropdown-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ls-dropdown-menu:hover {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ls-dropdown-menu li {
+    border-bottom: 1px solid rgb(214, 209, 209);
+    padding: 5px;
+    font-weight: 500;
+    width: 100%;
+}
+
+.ls-dropdown-menu li:last-child {
+    border-bottom: 0;
+}
+
+.ls-dropdown-menu li:hover {
+    color: #56028f;
 }
 
 .ls-search {
