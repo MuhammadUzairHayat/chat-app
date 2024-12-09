@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -14,30 +14,53 @@ const firebaseConfig = {
   appId: "1:439145492638:web:2061bd63c6154613e24b8f"
 };
 
-// Initialize Firebase
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app)
+const db = getFirestore(app);
 
 const signUp = async (username, email, password) => {
     try {
-        const response = await createUserWithEmailAndPassword(email, password);
+        const response = await createUserWithEmailAndPassword(auth, email, password);
         const user = response.user;
 
-        await setDoc(doc(db, 'users', user.id), {
-            id: user.id,
+        // Add user to Firestore
+        await setDoc(doc(db, 'users', user.uid), {
+            id: user.uid,
             avatar: "",
             username: username.toLowerCase(),
             email: email,
-            bio: "Hey, I,m using chat-app"
-        })
+            bio: "Hey, I’m using chat-app"
+        });
 
-        await setDoc(doc(db, 'chats', user.id), {
+        // Initialize empty chat data
+        await setDoc(doc(db, 'chats', user.uid), {
             chatData: []
-        })
-        
+        });
+
+        console.log("User successfully registered!");
     } catch (error) {
-        console.error("Error creating user: ", error.message);  
-        toast.error(error.code)
+        console.error("Error creating user: ", error.message);
+        toast.error(error.code.split('/')[1].split('-').join(" ")); // Ensure `toast` is correctly initialized if used.
+    }
+};
+
+const signIn = async (email, password)=> {
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+        console.error("Error creating user: ", error.message);
+        toast.error(error.code.split('/')[1].split('-').join(" ")); // Ensure `toast` is correctly initialized if used.
     }
 }
+
+const logout = async () => {
+    try {
+        await signOut(auth) 
+    } catch (error) {
+        console.error("Error creating user: ", error.message);
+        toast.error(error.code.split('/')[1].split('-').join(" ")); // Ensure `toast` is correctly initialized if used.  
+    }
+}
+
+export { signUp, signIn, logout, auth, db };

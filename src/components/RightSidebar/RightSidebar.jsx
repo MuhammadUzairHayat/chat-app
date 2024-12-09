@@ -2,6 +2,7 @@
 import React from 'react';
 import './RightSidebar.css'
 import assets from '../../assets/assets';
+import { logout } from '../../config/firebase';
 
 const RightSidebar = () => {
   return (
@@ -33,7 +34,7 @@ const RightSidebar = () => {
         </div>
          
         <div className="rs-logout-div">
-        <button className="rs-logout-btn rounded-full shadow-lg">Logout</button>
+        <button className="rs-logout-btn rounded-full shadow-lg" onClick={()=> logout()}>Logout</button>
 
         </div>
       </div>
