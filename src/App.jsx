@@ -52,7 +52,7 @@ const App = () => {
             {/* Other public routes here */}
 
             <Route path="/" element={<PrivateRoutes user={user} />}>
-              <Route index  element={<Chat />} />
+              <Route index  element={<Chat user={user} />} />
               <Route path="profile" element={<ProfileUpdate />} />
               {/* Other private routes here */}
             </Route>
