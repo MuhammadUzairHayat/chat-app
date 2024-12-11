@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Login from "./Pages/Login/Login";
 import Chat from "./Pages/Chat/Chat";
@@ -15,10 +15,12 @@ import { fetchUsers } from "./Features/userSlice.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import Store from "./APP/Store";
 import { BookLoaderComponent } from "./Pages/ProfileUpdate/Loader.jsx";
+import { AuthContext } from "./context/AuthContext.jsx";
 // import { fetchUsers } from "./Features/userSlice";
 
 const App = () => {
-
+   
+  const {authUser, setAuthUser} = useContext(AuthContext)
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   // const dispatch = useDispatch();
@@ -31,6 +33,7 @@ const App = () => {
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       setUser(user);
+      setAuthUser(user)
       setIsLoading(!isLoading);
       // dispatch(fetchUsers())
     });
@@ -53,7 +56,7 @@ const App = () => {
 
             <Route path="/" element={<PrivateRoutes user={user} />}>
               <Route index  element={<Chat user={user} />} />
-              <Route path="profile" element={<ProfileUpdate />} />
+              <Route path="profile" element={<ProfileUpdate loginUser={user} />} />
               {/* Other private routes here */}
             </Route>
 

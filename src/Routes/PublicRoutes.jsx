@@ -10,7 +10,7 @@ const PublicRoutes = ({user}) => {
 console.log(user)
 
     return user ? (
-      <Navigate to="/chat" />
+      <Navigate to="/" />
     ) : (
       <Outlet />
     );

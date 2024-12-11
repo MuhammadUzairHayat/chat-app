@@ -160,6 +160,7 @@
     height: 60px;
     border-radius: 50%;
     margin-left: 3px;
+    object-fit: cover;
 }
 
 .ls-profile-info {

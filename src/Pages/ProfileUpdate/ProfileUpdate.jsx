@@ -1,18 +1,18 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./ProfileUpdate.css";
 import assets from "../../assets/assets";
 import { useSelector } from "react-redux";
 import { getUploadFileURL, updateUserProfile } from "../../config/firbaseUtility";
 import { toast } from "react-toastify";
 import { BookLoaderComponent } from "./Loader";
+import { AuthContext } from "../../context/AuthContext";
 
 const ProfileUpdate = () => {
-  const userData = useSelector((state) => state.users);
-  const [isLoading, setIsLoading] = useState(true)
-  const { status, users, error } =  userData;
-  console.log(status, ' ', users, ' ', error)
+  const {authUser, setAuthUser} = useContext(AuthContext)
+  const { status, users, error } = useSelector((state) => state.users);
 
+  const [currentUser, setCurrentUser] = useState(null)
   const [imagePreview, setImagePreview] = useState(null);
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
@@ -21,7 +21,8 @@ const ProfileUpdate = () => {
   // Update state when `users` changes
   useEffect(() => {
     if (status === "succeeded" && users.length > 0) {
-      const user = users[0]; // Assuming we use the first user in the array
+      const user = users.find((user)=> user.id === authUser.uid)
+      setCurrentUser(user)
       setImagePreview(user.avatar || assets.avatar_icon);
       setName(user.username || "User Name");
       setBio(
@@ -32,11 +33,12 @@ const ProfileUpdate = () => {
 
   const UpdateProfileHandler = async (event) => {
     event.preventDefault();
+    setUpdateLoading(true)
 
 
     try {
       await updateUserProfile({
-        id: users[0].id,
+        id: currentUser.id,
         updatedDetails: {
           username: name,
           bio: bio,

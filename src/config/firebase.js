@@ -30,18 +30,19 @@ const signUp = async (username, email, password) => {
             avatar: "",
             username: username.toLowerCase(),
             email: email,
+            createdAt: Date.now(),
             bio: "Hey, I’m using chat-app"
         });
 
         // Initialize empty chat data
-        await setDoc(doc(db, 'chats', user.uid), {
-            chatData: []
-        });
+        await setDoc(doc(db, 'chats'));
+
+        await setDoc(doc(db, 'messages'))
 
         console.log("User successfully registered!");
     } catch (error) {
         console.error("Error creating user: ", error.message);
-        toast.error(error.code.split('/')[1].split('-').join(" ")); // Ensure `toast` is correctly initialized if used.
+        toast.error(error.code.split('/')[1].split('-').join(" ")); 
     }
 };
 

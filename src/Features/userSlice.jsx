@@ -43,12 +43,10 @@ const usersSlice = createSlice({
   extraReducers(builder) {
     builder
     .addCase(fetchUsers.fulfilled, (state, action) => {
-      console.log('Data is fulfilled ', action.payload)
       state.status = "succeeded";
       state.users = action.payload; 
     })
     .addCase(fetchUsers.pending, (state) => {
-      console.log("Data is Pending")
       state.status = "loading";
     })
     .addCase(fetchUsers.rejected, (state, action) => {
