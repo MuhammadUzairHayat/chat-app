@@ -1,5 +1,5 @@
 import { BookLoader } from "react-awesome-loaders";
-export const BookLoaderComponent = () => {
+const BookLoaderComponent = () => {
   return (
     <>
       <BookLoader
@@ -11,3 +11,5 @@ export const BookLoaderComponent = () => {
     </>
   );
 };
+
+export default BookLoaderComponent;

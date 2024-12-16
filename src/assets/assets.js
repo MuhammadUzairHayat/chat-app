@@ -17,6 +17,7 @@ import arrow_icon from './arrow_icon.png'
 import green_dot from './green_dot.png'
 import info_icon from './infoicon.png'
 import bilal_img from './Bilal.jpg'
+import cross_icon from './icons8-cross.svg'
 
 const assets = {
     avatar_icon,
@@ -38,6 +39,7 @@ const assets = {
     green_dot,
     info_icon,
     bilal_img,
+    cross_icon
 }
 
 export default assets;

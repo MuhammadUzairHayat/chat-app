@@ -10,7 +10,7 @@ const LS_Main = ({filterUser, usersData, setSelectedFriend}) => {
     {(filterUser || usersData)
       .map((eachUser, index) => (
         <div key={index} className="ls-each-profile" onClick={()=> setSelectedFriend(eachUser)}>
-            {console.log(eachUser)}
+            {/* {console.log(eachUser)} */}
           <img
             className="ls-profile-img"
             src={eachUser.avatar || assets.avatar_icon}
@@ -18,7 +18,7 @@ const LS_Main = ({filterUser, usersData, setSelectedFriend}) => {
           />
           <div className="ls-profile-info">
             <h1> {eachUser.username}</h1>
-            <p>Software Engineer</p>
+            <p>{eachUser.lastMessage || `I'm using Chat-App` }</p>
           </div>
         </div>
       ))}

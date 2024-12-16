@@ -1,19 +1,26 @@
-import React from 'react'
+import { formatDistanceToNow } from 'date-fns';
+import React, { useEffect, useState } from 'react'
 
-const ReceiverMsg = ({assets}) => {
+const ReceiverMsg = ({assets, selectedFriend, msg}) => {
+
+   const [timestamp , setTimestamp] = useState(msg.timestamp)
+   useEffect(()=> {
+    const timerId = setInterval(() => {
+      setTimestamp(msg.timestamp)
+    }, 60000);
+ 
+    return ()=> clearInterval(timerId)
+   })
   return (
     <div className="chat-message-r">
     <div className="chat-message-content">
       <div className="chat-avatar-time">
-        <img className="msg-avatar" src={assets.profile_img} alt="" />
+        <img className="msg-avatar" src={selectedFriend.avatar || assets.profile_img} alt="" />
         <p className="msg">
-          I am doing well, thank you! How about you? Lorem ipsum dolor
-          sit amet, consectetur adipisicing elit. Ad minima ratione
-          ducimus reprehenderit expedita libero. Doloribus quibusdam sit
-          laudantium necessitatibus?
+          {msg.content}
         </p>
       </div>
-      <span className="chat-time">12:31 PM</span>
+      <span className="chat-time">{formatDistanceToNow(new Date(timestamp))}</span>
     </div>
   </div>
   )

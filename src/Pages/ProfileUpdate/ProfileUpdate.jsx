@@ -5,7 +5,7 @@ import assets from "../../assets/assets";
 import { useSelector } from "react-redux";
 import { getUploadFileURL, updateUserProfile } from "../../config/firbaseUtility";
 import { toast } from "react-toastify";
-import { BookLoaderComponent } from "./Loader";
+// import  BookLoaderComponent  from "./Loader";
 import { AuthContext } from "../../context/AuthContext";
 
 const ProfileUpdate = () => {
@@ -78,7 +78,7 @@ const ProfileUpdate = () => {
 
   return (
     <div className="profile">
-       {status === "loading" ? <BookLoaderComponent /> :
+       {status === "loading" ? `<BookLoaderComponent />` :
              <div className="profile-container">
 
              <form onSubmit={UpdateProfileHandler}>

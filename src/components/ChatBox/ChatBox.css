@@ -123,6 +123,7 @@
   height: 35px;
   border-radius: 50%;
   margin-right: 5px;
+  object-fit: cover;
 }
 
 .send-img, .receive-img {

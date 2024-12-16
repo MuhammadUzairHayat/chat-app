@@ -14,7 +14,7 @@ import { auth } from "./config/firebase";
 import { fetchUsers } from "./Features/userSlice.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import Store from "./APP/Store";
-import { BookLoaderComponent } from "./Pages/ProfileUpdate/Loader.jsx";
+import BookLoaderComponent from "./Pages/ProfileUpdate/Loader.jsx";
 import { AuthContext } from "./context/AuthContext.jsx";
 // import { fetchUsers } from "./Features/userSlice";
 

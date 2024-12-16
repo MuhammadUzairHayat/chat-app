@@ -1,5 +1,5 @@
 // import { useState, useEffect } from 'react';
-import { doc, updateDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, updateDoc } from 'firebase/firestore';
 import { db } from './firebase'; // Adjust the path as per your project structure
 
 export const getUploadFileURL = async (file) => {
@@ -34,6 +34,25 @@ export const updateUserProfile = async (user) => {
     }
 };
   
+
+export const getMessages = async (chatId)=> {
+  // console.log(`Chat id: `, chatId)
+  try {
+    const messagesRef = collection(db, 'chats', chatId.trim(), 'messages');
+    const querySnapshot = await getDocs(messagesRef);
+
+    const messages = querySnapshot.docs.map(doc => ({
+      id: doc.id, // Document ID
+      ...doc.data(), // Document data
+    }));
+    
+    // console.log('For Debugging: ', messages); // Debugging
+    return messages; // Return the array of messages
+  } catch (error) {
+    console.error("Error fetching messages: ", error);
+    throw error; // Handle errors appropriately
+  }
+}
 
 
 

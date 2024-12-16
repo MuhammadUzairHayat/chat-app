@@ -14,11 +14,11 @@ const SearchBar = ({setFilterUser, usersData}) => {
   useEffect(()=> {
     let timerId = setTimeout(() => {
     let findUser = usersData.filter((user)=>  {
-        if (searchingUser && user.email !== authUser.email) {
-            return user.username.includes(searchingUser)
-        }
+      
+      return searchingUser && user.id !== authUser.uid && user.username.includes(searchingUser);
+
     })
-     console.log(`filterUser: `, findUser)
+    //  console.log(`filterUser: `, findUser)
      setFilterUser(findUser)
         
     }, 500);
