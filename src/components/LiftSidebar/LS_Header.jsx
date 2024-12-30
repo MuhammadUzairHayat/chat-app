@@ -1,9 +1,9 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
+import { logout } from "../../config/firebase";
 
-
-const LS_Header = ({assets, setFilterUser, usersData}) => {
+const LS_Header = ({ assets, setFilterUser, usersData }) => {
   return (
     <div className="ls-header">
       <div className="ls-nav">
@@ -12,14 +12,17 @@ const LS_Header = ({assets, setFilterUser, usersData}) => {
         <div className="ls-dropdown-menu shadow-lg">
           <ul>
             <li>
-              <span href="">
-                <img className="ls-icon" src={assets.home_icon} alt="" />
-                <Link to={'/profile'}><p>Edit Profile</p></Link>
+              <span className="flex gap-2">
+                <img className="ls-dropdown-icon" src={assets.edit_profile_icon} alt="" />
+                <p><Link to={"/profile"}>
+                  Edit Profile
+                </Link>
+                </p>
               </span>
             </li>
             <li>
-              <span href="">
-                <img className="ls-icon" src={assets.logout_icon} alt="" />
+              <span onClick={() => logout()} className="flex gap-2">
+                <img className="ls-dropdown-icon" src={assets.logout_icon} alt="" />
                 <p>Logout</p>
               </span>
             </li>
@@ -31,7 +34,7 @@ const LS_Header = ({assets, setFilterUser, usersData}) => {
         <SearchBar setFilterUser={setFilterUser} usersData={usersData} />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LS_Header
+export default LS_Header;

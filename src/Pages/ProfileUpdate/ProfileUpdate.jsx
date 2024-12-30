@@ -22,11 +22,12 @@ const ProfileUpdate = () => {
   useEffect(() => {
     if (status === "succeeded" && users.length > 0) {
       const user = users.find((user)=> user.id === authUser.uid)
+      console.log(users)
       setCurrentUser(user)
-      setImagePreview(user.avatar || assets.avatar_icon);
-      setName(user.username || "User Name");
+      setImagePreview(user?.avatar || assets.avatar_icon);
+      setName(user?.username || "User Name");
       setBio(
-        user.bio || "Assalam-o-Alaikum! I hope you be in Good tune 😊."
+        user?.bio || "Assalam-o-Alaikum! I hope you be in Good tune 😊."
       );
     }
   }, [status, users]);
@@ -35,8 +36,10 @@ const ProfileUpdate = () => {
     event.preventDefault();
     setUpdateLoading(true)
 
-
+    
     try {
+     if (currentUser) {
+      console.log(`yes`)
       await updateUserProfile({
         id: currentUser.id,
         updatedDetails: {
@@ -45,6 +48,7 @@ const ProfileUpdate = () => {
           avatar: imagePreview,
         },
       });
+     }
 
       toast.success("Profile updated successfully!");
     } catch (error) {

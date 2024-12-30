@@ -5,8 +5,9 @@ import { getUploadFileURL } from "../../config/firbaseUtility";
 import { db } from "../../config/firebase";
 import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
 import { AuthContext } from "../../context/AuthContext";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit";
+import { fetchChats } from "../../Features/chatSlice";
 
 const SendMessageInput = ({selectedFriend, signInUser, setSentMessage, sentMessage}) => {
 
@@ -15,12 +16,15 @@ const SendMessageInput = ({selectedFriend, signInUser, setSentMessage, sentMessa
   const [img, setImg] = useState("");
   const [msg, setMsg] = useState("");
   const [lastMessage, setLastMessage] = useState('')
+  const dispatch = useDispatch();
 
 
 
   const sendMessageHandler = async (e) => {
     e.preventDefault()
-    const chatId = [signInUser.id, selectedFriend.id].sort().join("_");;
+    const chatId = [signInUser.id, selectedFriend.id].sort().join("_");
+    e.target.reset()
+
 
 
     await setDoc(doc(db, 'chats', chatId), {
@@ -44,8 +48,9 @@ const SendMessageInput = ({selectedFriend, signInUser, setSentMessage, sentMessa
 
     setImg("")
     setMsg("")
-    e.target.reset()
-    setSentMessage(!sentMessage)
+    // setSentMessage(!sentMessage)
+    dispatch(fetchChats())
+    
 }
 
   const changeFileHandler = async ({ target }) => {
@@ -96,10 +101,10 @@ const SendMessageInput = ({selectedFriend, signInUser, setSentMessage, sentMessa
           onChange={changeFileHandler}
           hidden
         />
-        <img className="chat-gallery-icon" src={assets.gallery_icon} alt="" />
+        <img className="chat-gallery-icon" src={assets.gallery_blue_icon} alt="" />
       </label>
-      <button type="submit">
-        <img className="chat-send-icon" src={assets.send_button} alt="" />
+      <button type="submit" disabled={!msg && !img}>
+        <img className={`chat-send-icon ${!msg && !img ? "opacity-60 cursor-no-drop" : "cursor-pointer" }`} src={assets.send_button} alt="" />
       </button>
     </form>
   );

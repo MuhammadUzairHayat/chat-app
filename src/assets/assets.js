@@ -18,6 +18,12 @@ import green_dot from './green_dot.png'
 import info_icon from './infoicon.png'
 import bilal_img from './Bilal.jpg'
 import cross_icon from './icons8-cross.svg'
+import menu_dots_icon from './menu_dots_icon.png'
+import zakarya_pic from './zakarya_pic.jpg'
+import purple_cross_icon from './pur_cross_icon.png'
+import edit_profile_icon from './icons8-edit-profile-48.png'
+import logout_icon from './icons8-logout-50.png';
+import gallery_blue_icon from './gallery-blue-icon.png'
 
 const assets = {
     avatar_icon,
@@ -39,7 +45,13 @@ const assets = {
     green_dot,
     info_icon,
     bilal_img,
-    cross_icon
+    cross_icon,
+    menu_dots_icon,
+    zakarya_pic,
+    purple_cross_icon,
+    edit_profile_icon,
+    logout_icon,
+    gallery_blue_icon
 }
 
 export default assets;

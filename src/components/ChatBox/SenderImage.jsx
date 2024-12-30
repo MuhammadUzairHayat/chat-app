@@ -1,28 +1,61 @@
-import { formatDistanceToNow } from 'date-fns'
-import React, { useEffect, useState } from 'react'
+import { formatDistanceToNow } from "date-fns";
+import React, { useEffect, useState } from "react";
+import { deleteMessages } from "../../config/firbaseUtility";
 
-const SenderImage = ({assets, msg, signInUser}) => {
-  
-     const [timestamp , setTimestamp] = useState(msg.timestamp)
-     useEffect(()=> {
-      const timerId = setInterval(() => {
-        // console.log(`Minute Passed Checked`)
-        setTimestamp(msg.timestamp)
-      }, 60000);
-   
-      return ()=> clearInterval(timerId)
-     }, [msg.timestamp])
+const SenderImage = ({assets, signInUser, msg, deleteMsg, setDeleteMsg, chatAbout}) => {
+  const [timestamp, setTimestamp] = useState(msg.timestamp);
+  const [isShowMenu, setIsShowMenu] = useState(false);
+  const [isZoom, setIsZoom] = useState(false);
+
+  const deleteMsgHandler = () => {
+    console.log(chatAbout.id, " ", msg.id);
+    deleteMessages(chatAbout.id, msg.id);
+    setDeleteMsg(!deleteMsg);
+  };
+
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      // console.log(`Minute Passed Checked`)
+      setTimestamp(msg.timestamp);
+    }, 60000);
+
+    return () => clearInterval(timerId);
+  }, [msg.timestamp]);
   return (
-    <div className="chat-message-s">
-    <div className="chat-message-content">
-      <div className="chat-avatar-time">
-        <img className="msg-avatar" src={signInUser.avatar || assets.profile_img} alt="" />
-        <img className="send-img" src={msg.img || assets.profile_img} alt="" />
-      </div>{" "}
-      <span className="chat-time">{formatDistanceToNow(new Date(timestamp))}</span>
+    <div className="chat-message-s text-msg">
+      <div className="chat-message-content">
+        <div className="chat-avatar-time">
+          <img
+            className="msg-avatar"
+            src={signInUser.avatar || assets.profile_img}
+            alt=""
+          />
+          <div className="menu_msg_div s-msg-menu s-img-msg_menu">
+            <img
+              className={`send-img ${isZoom ? "send-img-zoom" : ""}`}
+              src={msg.img || assets.pic2}
+              alt=""
+              onClick={() => setIsZoom(!isZoom)}
+            />
+            <img
+              className="message-menu"
+              src={assets.menu_dots_icon}
+              alt=""
+              onClick={() => setIsShowMenu(!isShowMenu)}
+            />
+            <div className={`menu-list ${!isShowMenu ? "dis-none" : ""}`}>
+              <ul className="text-xs" onMouseLeave={() => setIsShowMenu(false)}>
+                <li onClick={deleteMsgHandler}>Delete</li>
+              </ul>
+            </div>
+          </div>
+        </div>{" "}
+        <span className="chat-time">
+          {formatDistanceToNow(new Date(timestamp))} ago
+        </span>
+      </div>
     </div>
-  </div>
-  )
-}
+  );
+};
 
-export default SenderImage
+export default SenderImage;

@@ -35,3 +35,11 @@
   align-items: center;
   justify-content: center;
 }
+
+.hide {
+  transform: translateX(0px);
+}
+
+.dis-none {
+  display: none;
+}

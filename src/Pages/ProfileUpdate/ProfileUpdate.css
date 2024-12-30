@@ -85,7 +85,7 @@
 }
 
 .pic-name-bio .profile-img {
-    width: 150px;
+    max-width: 150px;
     aspect-ratio: 1/1;
     border-radius: 50%;
     object-fit: cover;

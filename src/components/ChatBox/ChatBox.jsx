@@ -14,7 +14,7 @@ import SendMessageInput from "./SendMessageInput";
 import { getMessages } from "../../config/firbaseUtility";
 
 // eslint-disable-next-line react/prop-types
-const ChatBox = ({ selectedFriend }) => {
+const ChatBox = ({ selectedFriend, setLSisVisible, LSisVisible }) => {
   const { authUser } = useContext(AuthContext);
   const [chatAbout, setChatAbout] = useState(null);
   const [chatMessages, setChatMessages] = useState(null);
@@ -72,14 +72,14 @@ const ChatBox = ({ selectedFriend }) => {
     return <div className="flex items-center justify-center ">loading</div>;
   } else if (!selectedFriend) {
     return (
-      <div className="flex items-center justify-center flex-col">
+      <div className="flex items-center justify-center flex-col h-[100vh]">
         {" "}
         <img className="max-w-40 opacity-90" src={assets.logo_icon} alt="" />
         <h2 className="text-[#333]"> Welcome to Chat-App </h2>
-        <p className="text-gray-400 text-xs">
+        <p className="text-gray-400 text-xs text-center px-2">
           App made by Unknown one Select User To Chat with him
         </p>
-        <p className="bg-[#0289cc] text-white px-6 py-2 rounded-full mt-6">
+        <p onClick={()=> setLSisVisible(!LSisVisible)} className="bg-[#0289cc] text-white px-6 py-2 rounded-full mt-6">
           chat-App
         </p>
       </div>
@@ -114,12 +114,19 @@ const ChatBox = ({ selectedFriend }) => {
                         assets={assets}
                         signInUser={signInUser}
                         msg={msg}
+                        deleteMsg={sentMessage}
+                        setDeleteMsg={setSentMessage}
+                        chatAbout={chatAbout}
                       />
+                      
                     ) : (
                       <SenderImage
                         assets={assets}
                         signInUser={signInUser}
                         msg={msg}
+                        deleteMsg={sentMessage}
+                        setDeleteMsg={setSentMessage}
+                        chatAbout={chatAbout}
                       />
                     )}
                   </>
@@ -130,12 +137,18 @@ const ChatBox = ({ selectedFriend }) => {
                         assets={assets}
                         selectedFriend={selectedFriend}
                         msg={msg}
+                        deleteMsg={sentMessage}
+                        setDeleteMsg={setSentMessage}
+                        chatAbout={chatAbout}
                       />
                     ) : (
                       <ReceiverImage
                         assets={assets}
                         selectedFriend={selectedFriend}
                         msg={msg}
+                        deleteMsg={sentMessage}
+                        setDeleteMsg={setSentMessage}
+                        chatAbout={chatAbout}
                       />
                     )}
                   </>
@@ -143,6 +156,8 @@ const ChatBox = ({ selectedFriend }) => {
               </div>
             ))
           )}
+
+        <button onClick={()=> setLSisVisible(!LSisVisible)} className="start_chat_btn"><img src={assets.logo_icon} alt="" /></button> 
         </div>
 
         {/* ----- Send_Message_Input ------ */}

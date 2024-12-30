@@ -8,12 +8,14 @@ import LiftSidebar from '../../components/LiftSidebar/LiftSidebar'
 const Chat = () => {
  
   const [selectedFriend, setSelectedFriend] = useState(null)
+  const [LSisVisible, setLSisVisible] = useState(true)
+  console.log(`LSisVisible `, LSisVisible);
 
   return (
     <div className='chat'>
       <div className="chat-container">
-        <LiftSidebar setSelectedFriend={setSelectedFriend} />
-        <ChatBox selectedFriend={selectedFriend}/>
+        <LiftSidebar setSelectedFriend={setSelectedFriend} LSisVisible={LSisVisible} setLSisVisible={setLSisVisible} />
+        <ChatBox selectedFriend={selectedFriend} setLSisVisible={setLSisVisible} LSisVisible={LSisVisible} />
         <RightSidebar />
       </div>
     </div>

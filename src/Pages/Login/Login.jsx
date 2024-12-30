@@ -4,8 +4,10 @@ import assets from "../../assets/assets";
 import "./Login.css";
 import { useForm } from "react-hook-form";
 import { signIn, signUp } from "../../config/firebase";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [formState, setFormState] = useState("Sign In");
   const {
     register,
@@ -16,8 +18,10 @@ const Login = () => {
   const signUpSubmit = (data) => {
     if(formState === "Sign Up") {
       signUp(data.name, data.email, data.password)
+      navigate('/')
     } else {
       signIn(data.email, data.password)
+      
     }
   };
 

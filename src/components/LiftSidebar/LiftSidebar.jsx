@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import LS_Header from "./LS_Header";
 import LS_Main from "../ChatBox/LS_Main";
 
-const LiftSidebar = ({setSelectedFriend}) => {
+const LiftSidebar = ({setSelectedFriend, LSisVisible, setLSisVisible}) => {
   const [filterUser, setFilterUser] = useState([])
   const { status, users, error } = useSelector((state) => state.users);
 
@@ -16,8 +16,9 @@ const LiftSidebar = ({setSelectedFriend}) => {
   }
   
   return (
-    <div>
-      <div className="ls">
+    <div className="ls-container">
+      <div className={`ls  ${(LSisVisible)? `LS_hide`: "LS_unhide "}`} >
+      <button onClick={()=> setLSisVisible(!LSisVisible)} className="close_LS_btn"> <img  src={assets.cross_icon} alt="" /></button>
         {/* ---- LeftSidebar Header ---- */}
         <LS_Header assets={assets} setFilterUser={setFilterUser} usersData={users} />
 

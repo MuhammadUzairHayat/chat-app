@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { collection, getDoc, getDocs } from "firebase/firestore";
+import { collection, getDoc, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "../config/firebase";
 // import { useGetData } from "../config/firbaseUtility";
 
@@ -9,20 +9,34 @@ const initialState = {
   chatsError: null,
 };
 
-export const fetchChats = createAsyncThunk("chats/fetchChats", async () => {
+export const fetchChats = createAsyncThunk("chats/fetchChats", async (_, { rejectWithValue }) => {
   try {
     const colRef = collection(db, "chats");
-    const snapshot = await getDocs(colRef); 
-    const chats = snapshot.docs.map((doc) => ({
-      id: doc.id, 
-      ...doc.data(), 
-    }));
-    console.log(chats)
-    return [...chats];
+    let unsubscribe = null;
+
+    return new Promise((resolve, reject) => {
+      unsubscribe = onSnapshot(
+        colRef,
+        (snapshot) => {
+          const chats = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          resolve(chats);
+        },
+        (error) => {
+          reject(rejectWithValue(error.message));
+        }
+      );
+    });
+
+    return () => unsubscribe && unsubscribe(); // Cleanup the listener
   } catch (error) {
-    console.error("Error fetching users:", error);
+    console.error("Error fetching chats:", error);
+    return rejectWithValue(error.message);
   }
 });
+
 
 const chatSlice = createSlice({
   name: "chats",

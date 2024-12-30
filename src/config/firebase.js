@@ -35,9 +35,9 @@ const signUp = async (username, email, password) => {
         });
 
         // Initialize empty chat data
-        await setDoc(doc(db, 'chats'));
+        // await setDoc(doc(db, 'chats'));
 
-        await setDoc(doc(db, 'messages'))
+        // await setDoc(doc(db, 'messages'))
 
         console.log("User successfully registered!");
     } catch (error) {

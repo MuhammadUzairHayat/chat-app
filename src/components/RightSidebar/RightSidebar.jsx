@@ -20,9 +20,9 @@ const RightSidebar = () => {
     if (status === "succeeded" && users.length > 0) {
       const user = users.find((user) => user.id === authUser.uid);
       setCurrentUser(user);
-      setImagePreview(user.avatar || assets.avatar_icon);
-      setName(user.username || "User Name");
-      setBio(user.bio || "Assalam-o-Alaikum! I hope you be in Good tune 😊.");
+      setImagePreview(user?.avatar || assets.avatar_icon);
+      setName(user?.username || "User Name");
+      setBio(user?.bio || "Assalam-o-Alaikum! I hope you be in Good tune 😊.");
     }
   }, [status, users]);
 
