@@ -1,16 +1,20 @@
 import { formatDistanceToNow } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { deleteMessages } from "../../config/firbaseUtility";
+import { fetchChats } from "../../Features/chatSlice";
+import { useDispatch } from "react-redux";
 
 const SenderImage = ({assets, signInUser, msg, deleteMsg, setDeleteMsg, chatAbout}) => {
   const [timestamp, setTimestamp] = useState(msg.timestamp);
   const [isShowMenu, setIsShowMenu] = useState(false);
   const [isZoom, setIsZoom] = useState(false);
+  const dispatch = useDispatch();
 
   const deleteMsgHandler = () => {
     console.log(chatAbout.id, " ", msg.id);
     deleteMessages(chatAbout.id, msg.id);
     setDeleteMsg(!deleteMsg);
+    dispatch(fetchChats());
   };
 
   useEffect(() => {

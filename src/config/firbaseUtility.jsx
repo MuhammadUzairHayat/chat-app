@@ -55,13 +55,19 @@ export const getMessages = async (chatId)=> {
 }
 
 export const deleteMessages = async (chatId, msgId)=> {
+
   // console.log(`Chat id: `, chatId)
   try {
     const messagesRef = doc(db, 'chats', chatId.trim(), 'messages', msgId);
-    await deleteDoc(messagesRef);
+    await updateDoc(messagesRef, {
+      content: '🗑️ This message has been deleted',
+      img: null,
+      type: 'text'
+    });
     await updateDoc(doc(db, 'chats', chatId.trim()), {
-      lastMessage: '',
-      lastMessageTimestamp: null,
+      lastMessage: 'del',
+      lastMessageTimestamp: Date.now(),
+      lastImg: null
     });
 
   } catch (error) {

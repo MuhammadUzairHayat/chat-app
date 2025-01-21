@@ -6,65 +6,92 @@ import { logout } from "../../config/firebase";
 import { AuthContext } from "../../context/AuthContext";
 import { useSelector } from "react-redux";
 
-const RightSidebar = () => {
+const RightSidebar = ({ selectedFriend }) => {
   const { authUser, setAuthUser } = useContext(AuthContext);
   const { status, users, error } = useSelector((state) => state.users);
-
-  const [currentUser, setCurrentUser] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
-  const [name, setName] = useState("");
-  const [bio, setBio] = useState("");
-  const [updateLoading, setUpdateLoading] = useState(false);
+  const { chatsStatus, chats, chatsError } = useSelector(
+    (state) => state.chats
+  );
+  const [receiver, setReceiver] = useState(null);
+  const [chatAbout, setChatAbout] = useState(null);
+  const [chatMessages, setChatMessages] = useState(null);
+  const [magnifyImage, setMagnifyImage] = useState(false);
   // Update state when `users` changes
-  useEffect(() => {
-    if (status === "succeeded" && users.length > 0) {
-      const user = users.find((user) => user.id === authUser.uid);
-      setCurrentUser(user);
-      setImagePreview(user?.avatar || assets.avatar_icon);
-      setName(user?.username || "User Name");
-      setBio(user?.bio || "Assalam-o-Alaikum! I hope you be in Good tune 😊.");
-    }
-  }, [status, users]);
 
-  if (status !== "succeeded") {
-    return <div className="flex items-center justify-center">Loading ...</div>;
-  }
+  useEffect(() => {
+    if (chatsStatus === "succeeded" && selectedFriend) {
+      const gettingChat = chats.find(
+        (chat) => chat.id === selectedFriend?.chats?.id
+      );
+      // console.log(`Getting Chat: `, gettingChat);
+      setReceiver(selectedFriend.user);
+      setChatAbout(gettingChat || null);
+      // console.log(`slecetedFriend User : `, selectedFriend.user.id);
+      setChatMessages(gettingChat?.messages || null);
+    }
+  }, [selectedFriend, chatsStatus, chats]);
+
+  // if (status !== "succeeded" && !receiver && !chatMessages && !chatAbout) {
+  //   return <div className="flex items-center justify-center">Loading ...</div>;
+  // }
   return (
     <div className="rs">
+      {/* {console.log(`Selected Friend: `, selectedFriend)} */}
+      {/* {console.log(`receiver: `, receiver)} */}
+      {/* {console.log(`chatMessages: `, chatMessages )} */}
       <div className="rs-user-bio">
-        <img className="rs-bio-img" src={imagePreview || assets.avatar_icon} alt="" />
+        <img
+          className="rs-bio-img"
+          src={
+            !receiver
+              ? assets.logo_icon
+              : receiver?.avatar || assets.avatar_icon
+          }
+          alt=""
+        />
         <h3 className="rs-bio-name">
-          {name
-            .split(" ") 
-            .map(
-              (word) =>
-                word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-            ) 
-            .join(" ") || "User Name"}{" "}
-          <span className="chat-user-status">online</span>
+          {!receiver
+            ? `Chat-App`
+            : receiver?.username
+                .split(" ")
+                .map(
+                  (word) =>
+                    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+                )
+                .join(" ") || "User Name"}
+          {receiver && <span className="chat-user-status">online</span>}
         </h3>
 
         <p className="rs-bio-desc">
-          {bio || `Hey, I'm using chat-app 😊`}
+          {!receiver
+            ? `Welcome! Make your Friends Here 😊`
+            : receiver?.bio || `Hey, I'm using chat-app 😊`}
         </p>
       </div>
 
       <div className="rs-media">
         <h4>Media</h4>
         <div className="rs-media-items">
-          <img src={assets.pic1} alt="" />
-          <img src={assets.pic2} alt="" />
-          <img src={assets.pic3} alt="" />
-          <img src={assets.pic4} alt="" />
-          <img src={assets.pic1} alt="" />
-          <img src={assets.pic2} alt="" />
-
-          <img src={assets.pic1} alt="" />
-          <img src={assets.pic2} alt="" />
-          <img src={assets.pic3} alt="" />
-          <img src={assets.pic4} alt="" />
-          <img src={assets.pic1} alt="" />
-          <img src={assets.pic2} alt="" />
+          {chatMessages ? (
+            chatMessages.map((message, index) => {
+              return message.type === "image" ? (
+                <img
+                  key={index}
+                  className={
+                    "rs-media-img " + (magnifyImage ? "absolute z-[50000]" : "")
+                  }
+                  src={message?.img}
+                  alt=""
+                  onClick={() => setMagnifyImage(!magnifyImage)}
+                />
+              ) : null;
+            })
+          ) : (
+            <div className="col-span-3 flex flex-col items-center justify-center w-full ">
+              <img src={assets.media_icon} alt="" />
+              <p className="text-gray-200 mt-4 text-sm">This is Your Media</p>
+            </div>
+          )}
         </div>
 
         <div className="rs-logout-div">

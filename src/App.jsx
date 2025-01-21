@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Store from "./APP/Store";
 // import BookLoaderComponent from "./Pages/ProfileUpdate/Loader.jsx";
 import { AuthContext } from "./context/AuthContext.jsx";
+import { useMessageNotifications } from "./hooks/useMessageNotification.jsx";
 // import { fetchUsers } from "./Features/userSlice";
 
 const App = () => {
@@ -23,12 +24,6 @@ const App = () => {
   const {authUser, setAuthUser} = useContext(AuthContext)
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  // const dispatch = useDispatch();
-
-
-  // const {data} = useGetData('users')
-  // console.log('App data: ', data)
-  // fetchUsers()
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
@@ -36,6 +31,15 @@ const App = () => {
       setAuthUser(user)
       setIsLoading(!isLoading);
       // dispatch(fetchUsers())
+      // if ("Notification" in window) {
+      //   Notification.requestPermission().then((permission) => {
+      //     if (permission === "granted") {
+      //       alert("Notification permission granted.");
+      //     } else {
+      //       alert("Notification permission denied.");
+      //     }
+      //   });
+      // }
     });
   }, []);
 

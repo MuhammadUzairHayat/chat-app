@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { collection, getDoc, getDocs, onSnapshot } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from "../config/firebase";
-// import { useGetData } from "../config/firbaseUtility";
 
 const initialState = {
   chatsStatus: "idle",
@@ -9,56 +8,74 @@ const initialState = {
   chatsError: null,
 };
 
-export const fetchChats = createAsyncThunk("chats/fetchChats", async (_, { rejectWithValue }) => {
-  try {
-    const colRef = collection(db, "chats");
-    let unsubscribe = null;
+export const fetchChats = createAsyncThunk(
+  "chats/fetchChats",
+  async (_, { rejectWithValue }) => {
+    try {
+      const colRef = collection(db, "chats");
+      let unsubscribe = null;
 
-    return new Promise((resolve, reject) => {
-      unsubscribe = onSnapshot(
-        colRef,
-        (snapshot) => {
-          const chats = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          resolve(chats);
-        },
-        (error) => {
-          reject(rejectWithValue(error.message));
-        }
-      );
-    });
+      return new Promise((resolve, reject) => {
+        unsubscribe = onSnapshot(
+          colRef,
+          async (snapshot) => {
+            const chats = await Promise.all(
+              snapshot.docs.map(async (doc) => {
+                const chatData = doc.data();
+                const chatId = doc.id;
+                
+                // Fetch messages for this specific chatId
+                const messagesRef = collection(db, "chats", chatId, "messages");
+                const messagesSnapshot = await getDocs(query(messagesRef, orderBy("timestamp", "asc")));
 
-    return () => unsubscribe && unsubscribe(); // Cleanup the listener
-  } catch (error) {
-    console.error("Error fetching chats:", error);
-    return rejectWithValue(error.message);
+                const messages = messagesSnapshot.docs.map((msgDoc) => ({
+                  id: msgDoc.id,
+                  ...msgDoc.data(),
+                }));
+
+                return {
+                  id: chatId,
+                  ...chatData,
+                  messages, // Attach messages to each chat
+                };
+              })
+            );
+
+            resolve(chats);
+            // console.log("Chats with messages: ", chats);
+          },
+          (error) => {
+            reject(rejectWithValue(error.message));
+          }
+        );
+      });
+
+      // Cleanup listener when done
+      return () => unsubscribe && unsubscribe();
+    } catch (error) {
+      console.error("Error fetching chats:", error);
+      return rejectWithValue(error.message);
+    }
   }
-});
-
+);
 
 const chatSlice = createSlice({
   name: "chats",
   initialState,
-  reducers: {
-    addMessage: (state, action) => void state.push(action.payload),
-    clearMessages: (state) => void (state.length = 0),
-  },
+  reducers: { },
   extraReducers(builder) {
     builder
-    .addCase(fetchChats.fulfilled, (state, action) => {
-      state.chatsStatus = "succeeded";
-      state.chats = action.payload; 
-    })
-    .addCase(fetchChats.pending, (state) => {
-      state.chatsStatus = "loading";
-    })
-    .addCase(fetchChats.rejected, (state, action) => {
-      console.log("Error Occurred: ", action.error.message)
-      state.chatsStatus = "failed";
-      state.error = action.error.message || "Failed to fetch users"; 
-    })
+      .addCase(fetchChats.fulfilled, (state, action) => {
+        state.chatsStatus = "succeeded";
+        state.chats = action.payload; // Now contains chats and their messages
+      })
+      .addCase(fetchChats.pending, (state) => {
+        state.chatsStatus = "loading";
+      })
+      .addCase(fetchChats.rejected, (state, action) => {
+        state.chatsStatus = "failed";
+        state.chatsError = action.error.message || "Failed to fetch chats";
+      });
   },
 });
 

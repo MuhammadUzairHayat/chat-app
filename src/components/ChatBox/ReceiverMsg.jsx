@@ -1,6 +1,8 @@
 import { formatDistanceToNow } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { deleteMessages } from "../../config/firbaseUtility";
+import { fetchChats } from "../../Features/chatSlice";
+import { useDispatch } from "react-redux";
 
 const ReceiverMsg = ({
   assets,
@@ -12,11 +14,13 @@ const ReceiverMsg = ({
 }) => {
   const [timestamp, setTimestamp] = useState(msg.timestamp);
   const [isShowMenu, setIsShowMenu] = useState(false);
+  const dispatch = useDispatch();
 
   const deleteMsgHandler = () => {
     console.log(chatAbout.id, " ", msg.id);
     deleteMessages(chatAbout.id, msg?.id);
     setDeleteMsg(!deleteMsg);
+    dispatch(fetchChats());
   };
   useEffect(() => {
     const timerId = setInterval(() => {
@@ -35,7 +39,7 @@ const ReceiverMsg = ({
             alt=""
           />
           <div className="menu-msg-div  r-msg-menu">
-            <p className="msg">{msg.content}</p>
+            <p className={`msg   ${msg.content === "🗑️ The message has been deleted" ? `msg-del-clr` : `msg-clr`}`}>{msg.content}</p>
             <img
               className="r-message-menu"
               src={assets.menu_dots_icon}

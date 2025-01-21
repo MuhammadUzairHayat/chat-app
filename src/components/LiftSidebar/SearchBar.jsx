@@ -1,35 +1,36 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
-import { auth } from '../../config/firebase';
 
-const SearchBar = ({setFilterUser, usersData}) => {
-  const {authUser, setAuthUser} = useContext(AuthContext)
-  const [searchingUser, setSearchingUser] = useState(null)
+const SearchBar = ({ setFilterUser, usersData }) => {
+  const { authUser } = useContext(AuthContext);
+  const [searchingUser, setSearchingUser] = useState('');
 
- 
-
-  
-
-  useEffect(()=> {
+  useEffect(() => {
     let timerId = setTimeout(() => {
-    let findUser = usersData.filter((user)=>  {
-      
-      return searchingUser && user.id !== authUser.uid && user.username.includes(searchingUser);
-
-    })
-    //  console.log(`filterUser: `, findUser)
-     setFilterUser(findUser)
-        
+      if (searchingUser === '') {
+        // If search text is empty, show all users except the authenticated user
+        const allUsersExceptAuth = usersData.filter(user => user.id !== authUser.uid);
+        setFilterUser(allUsersExceptAuth);
+      } else {
+        // Filter users based on the search text
+        const foundUsers = usersData.filter(user => 
+          user.id !== authUser.uid && 
+          user.username.toLowerCase().includes(searchingUser)
+        );
+        setFilterUser(foundUsers);
+      }
     }, 500);
 
-    return ()=> clearTimeout(timerId)
-  }, [searchingUser, authUser, usersData])
- 
+    return () => clearTimeout(timerId);
+  }, [searchingUser, authUser, usersData, setFilterUser]);
+
   return (
-    <input type="text" onChange={({target}) => setSearchingUser(target.value.toLocaleLowerCase())} placeholder="Search..." />
+    <input
+      type="text"
+      onChange={({ target }) => setSearchingUser(target.value.toLowerCase())}
+      placeholder="Search..."
+    />
+  );
+};
 
-  )
-}
-
-export default SearchBar
+export default SearchBar;

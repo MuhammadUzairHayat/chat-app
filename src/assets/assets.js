@@ -24,6 +24,7 @@ import purple_cross_icon from './pur_cross_icon.png'
 import edit_profile_icon from './icons8-edit-profile-48.png'
 import logout_icon from './icons8-logout-50.png';
 import gallery_blue_icon from './gallery-blue-icon.png'
+import media_icon from './media_icon.png'
 
 const assets = {
     avatar_icon,
@@ -51,7 +52,8 @@ const assets = {
     purple_cross_icon,
     edit_profile_icon,
     logout_icon,
-    gallery_blue_icon
+    gallery_blue_icon,
+    media_icon
 }
 
 export default assets;

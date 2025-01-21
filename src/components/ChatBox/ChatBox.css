@@ -51,6 +51,7 @@
 }
 
 .chat-message {
+  position: relative;
   margin-bottom: 10px;
   padding-block: 20px;
   overflow-y: scroll;
@@ -185,14 +186,19 @@ li {
 }
 
 .chat-message-s .chat-message-content .msg{
-    background-color: #077eff;
   border-bottom-left-radius: 10px;
 }
-
 .chat-message-r .chat-message-content .msg{
-    background-color: #077eff;
-
   border-bottom-right-radius: 10px;
+}
+
+.msg-clr{
+  background-color: #077eff;
+}
+
+.msg-del-clr{
+    background-color: #888484;
+    font-style: italic;
 }
 
 .chat-message-s .chat-avatar-time {
@@ -289,7 +295,7 @@ li {
   .start_chat_btn {
     display: none;
     max-width: 50px;
-    position: absolute;
+    position: fixed;
     bottom: 50px;
     z-index: 2;
     transition: all 0.3s;
@@ -299,6 +305,27 @@ li {
     }
   }
 
+  .loader {
+    border: 5px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 5px solid #3498db;
+    width: 28px;
+    height: 28px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+  }
+  
+  /* Safari */
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
 
   @media screen and (max-width: 780px) {
     .chat-box {

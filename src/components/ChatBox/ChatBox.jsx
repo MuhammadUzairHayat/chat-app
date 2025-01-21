@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./ChatBox.css";
 import assets from "../../assets/assets";
 import { useSelector } from "react-redux";
@@ -12,65 +12,51 @@ import { AuthContext } from "../../context/AuthContext";
 import SelectedFriendBio from "./SelectedUser";
 import SendMessageInput from "./SendMessageInput";
 import { getMessages } from "../../config/firbaseUtility";
+import { set } from "date-fns";
+import { se } from "date-fns/locale";
+import { useMessageNotifications } from "../../hooks/useMessageNotification";
 
 // eslint-disable-next-line react/prop-types
 const ChatBox = ({ selectedFriend, setLSisVisible, LSisVisible }) => {
   const { authUser } = useContext(AuthContext);
+  const [receiver, setReceiver] = useState(null);
   const [chatAbout, setChatAbout] = useState(null);
   const [chatMessages, setChatMessages] = useState(null);
-  const [sentMessage, setSentMessage] = useState(true)
+  const [sentMessage, setSentMessage] = useState(true);
+  const [signInUser, setSignInUser] = useState(null);
   const { status, users, error } = useSelector((state) => state.users);
   const { chatsStatus, chats, chatsError } = useSelector(
     (state) => state.chats
   );
+  const bottomRef = useRef(null);
+  const chatContainerRef = useRef(null);
 
-  const [signInUser, setSignInUser] = useState(null);
-
+  // useMessageNotifications(authUser, receiver);
 
   useEffect(() => {
-    const fetchMessages = async (tempSelection) => {
-      if (tempSelection) {
-        try {
-          console.log(tempSelection.id);
-          const messages = await getMessages(tempSelection.id); // Await the promise
-          console.log(`Messages: `, messages);
-          setChatMessages(messages); // Store the resolved data in state
-        } catch (error) {
-          console.error("Error fetching messages: ", error);
-        }
+    if (chatsStatus === "succeeded" && selectedFriend) {
+      const result = users.find((user) => user.id === authUser.uid);
+      setSignInUser(result);
+      const gettingChat = chats.find(
+        (chat) =>
+          chat?.participants.includes(authUser.uid) &&
+          chat?.participants.includes(selectedFriend?.user?.id)
+      );
+      setReceiver(selectedFriend.user);
+      setChatAbout(gettingChat || null);
+      setChatMessages(gettingChat?.messages || null);
+      if (bottomRef.current) {
+        // setTimeout(() => {
+        //   bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+        // }, 2000);
       }
-    };
-
-    try {
-      if (status === "succeeded") {
-        const result = users.find((user) => user.id === authUser.uid);
-        setSignInUser(result);
-      }
-      if (chatsStatus === "succeeded" && selectedFriend) {
-        // console.log(`Check SelectedFriend:  `, selectedFriend.username);
-
-        const tempSelection = chats.find(
-          (chat) =>
-            chat.id === `${signInUser.id}_${selectedFriend.id}` ||
-            chat.id === `${selectedFriend.id}_${signInUser.id}`
-        );
-        // console.log(`Checking TempSelection: `, tempSelection);
-        console.log(tempSelection);
-        fetchMessages(tempSelection);
-        if (tempSelection) {
-          setChatAbout(tempSelection);
-        } else {
-          setChatMessages(null);
-        }
-      }
-    } catch (error) {
-      console.error(console.error);
     }
-  }, [chatsStatus, status, authUser, selectedFriend, users, chats, signInUser, sentMessage]);
+  }, [selectedFriend, chatsStatus, chats]);
 
-  if (status === "loading" && chatsStatus !== "succeeded") {
-    return <div className="flex items-center justify-center ">loading</div>;
-  } else if (!selectedFriend) {
+  // if (status === "loading" && chatsStatus !== "succeeded") {
+  //   return <div className="flex items-center justify-center ">loading</div>;
+  // }
+  if (!chatAbout && !chatMessages && !selectedFriend) {
     return (
       <div className="flex items-center justify-center flex-col h-[100vh]">
         {" "}
@@ -79,7 +65,10 @@ const ChatBox = ({ selectedFriend, setLSisVisible, LSisVisible }) => {
         <p className="text-gray-400 text-xs text-center px-2">
           App made by Unknown one Select User To Chat with him
         </p>
-        <p onClick={()=> setLSisVisible(!LSisVisible)} className="bg-[#0289cc] text-white px-6 py-2 rounded-full mt-6">
+        <p
+          onClick={() => setLSisVisible(!LSisVisible)}
+          className="bg-[#0289cc] text-white px-6 py-2 rounded-full mt-6"
+        >
           chat-App
         </p>
       </div>
@@ -88,26 +77,34 @@ const ChatBox = ({ selectedFriend, setLSisVisible, LSisVisible }) => {
     return (
       <div className="chat-box">
         {/* ---- Chat_Top_User_Bio -----*/}
-        <SelectedFriendBio assets={assets} selectedFriend={selectedFriend} />
+        <SelectedFriendBio assets={assets} selectedFriend={receiver} />
         {/* ---- Chatting-Of-User ----- */}
 
-        <div className="chat-message">
-          {console.log(chatMessages)}
+        <div className="chat-message" ref={chatContainerRef}>
+          {/* {console.log(chatMessages)} */}
           {!chatMessages ? (
             chatMessages === null ? (
-              <div className="flex items-center justify-center h-full text-sm flex-col text-gray-700"> <img className="max-w-32 max-h-32" src={assets.logo_icon} alt="" />chat with this Friend</div>
+              <div className="flex items-center justify-center h-full text-sm flex-col text-gray-700">
+                {" "}
+                <img
+                  className="max-w-32 max-h-32"
+                  src={assets.logo_icon}
+                  alt=""
+                />
+                chat with this Friend
+              </div>
             ) : (
               <div>
                 <div>chats Uploading...</div>
               </div>
             )
           ) : (
-            chatMessages.sort((a, b)=> a.timestamp - b.timestamp).map((msg, index) => (
+            chatMessages.map((msg, index) => (
               <div key={msg.id || index}>
-                {" "}
+                {/* {console.log("Message is here: ", msg)} */}
                 {/* Add a unique key for each element */}
                 {/* --- Sender Messages or Receiver Messages --- */}
-                {msg.senderId === signInUser?.id ? ( // Check if the message is from the sender
+                {msg.senderId === authUser.uid ? ( // Check if the message is from the sender
                   <>
                     {msg.type === "text" ? (
                       <SenderMsg
@@ -118,7 +115,6 @@ const ChatBox = ({ selectedFriend, setLSisVisible, LSisVisible }) => {
                         setDeleteMsg={setSentMessage}
                         chatAbout={chatAbout}
                       />
-                      
                     ) : (
                       <SenderImage
                         assets={assets}
@@ -135,7 +131,7 @@ const ChatBox = ({ selectedFriend, setLSisVisible, LSisVisible }) => {
                     {msg.type === "text" ? (
                       <ReceiverMsg
                         assets={assets}
-                        selectedFriend={selectedFriend}
+                        selectedFriend={receiver}
                         msg={msg}
                         deleteMsg={sentMessage}
                         setDeleteMsg={setSentMessage}
@@ -144,7 +140,7 @@ const ChatBox = ({ selectedFriend, setLSisVisible, LSisVisible }) => {
                     ) : (
                       <ReceiverImage
                         assets={assets}
-                        selectedFriend={selectedFriend}
+                        selectedFriend={receiver}
                         msg={msg}
                         deleteMsg={sentMessage}
                         setDeleteMsg={setSentMessage}
@@ -157,12 +153,21 @@ const ChatBox = ({ selectedFriend, setLSisVisible, LSisVisible }) => {
             ))
           )}
 
-        <button onClick={()=> setLSisVisible(!LSisVisible)} className="start_chat_btn"><img src={assets.logo_icon} alt="" /></button> 
+          <button
+            onClick={() => setLSisVisible(!LSisVisible)}
+            className="start_chat_btn"
+          >
+            <img src={assets.logo_icon} alt="" />
+          </button>
+          {/* Invisible div to scroll into view */}
+          <div ref={bottomRef} className="">
+            {" "}
+          </div>
         </div>
 
         {/* ----- Send_Message_Input ------ */}
         <SendMessageInput
-          selectedFriend={selectedFriend}
+          selectedFriend={receiver}
           signInUser={signInUser}
           sentMessage={sentMessage}
           setSentMessage={setSentMessage}

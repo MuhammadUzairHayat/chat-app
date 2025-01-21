@@ -17,12 +17,14 @@ const ProfileUpdate = () => {
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
   const [updateLoading, setUpdateLoading] = useState(false);
-
+  
+  console.log(`update User: `, users)
+  console.log(`Current User: `, authUser.uid)
   // Update state when `users` changes
   useEffect(() => {
     if (status === "succeeded" && users.length > 0) {
       const user = users.find((user)=> user.id === authUser.uid)
-      console.log(users)
+      console.log(`These are users: `,users)
       setCurrentUser(user)
       setImagePreview(user?.avatar || assets.avatar_icon);
       setName(user?.username || "User Name");
@@ -41,7 +43,7 @@ const ProfileUpdate = () => {
      if (currentUser) {
       console.log(`yes`)
       await updateUserProfile({
-        id: currentUser.id,
+        id: authUser.uid,
         updatedDetails: {
           username: name,
           bio: bio,

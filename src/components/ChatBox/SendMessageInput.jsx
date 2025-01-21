@@ -8,53 +8,59 @@ import { AuthContext } from "../../context/AuthContext";
 import { useDispatch, useSelector } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit";
 import { fetchChats } from "../../Features/chatSlice";
+import { fetchUsers } from "../../Features/userSlice";
 
-const SendMessageInput = ({selectedFriend, signInUser, setSentMessage, sentMessage}) => {
-
-
-  const [receiver, setReceiver] = useState(null)
+const SendMessageInput = ({
+  selectedFriend,
+  signInUser,
+  setSentMessage,
+  sentMessage,
+}) => {
+  const [receiver, setReceiver] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [img, setImg] = useState("");
   const [msg, setMsg] = useState("");
-  const [lastMessage, setLastMessage] = useState('')
+  const [lastMessage, setLastMessage] = useState("");
   const dispatch = useDispatch();
 
-
+  // console.log(`SelectedFriend: `, selectedFriend.id);
+  // console.log(`SignInUser: `, signInUser);
 
   const sendMessageHandler = async (e) => {
-    e.preventDefault()
-    const chatId = [signInUser.id, selectedFriend.id].sort().join("_");
-    e.target.reset()
+    setIsLoading(true);
+    e.preventDefault();
+    const chatId = [signInUser?.id, selectedFriend?.id].sort().join("_");
+    e.target.reset();
 
-
-
-    await setDoc(doc(db, 'chats', chatId), {
+    await setDoc(doc(db, "chats", chatId), {
       participants: [signInUser.id, selectedFriend.id], // Replace with actual user IDs
       lastMessage: img ? null : msg,
-      lastImg : img || null,
+      lastImg: img || null,
       lastMessageTimestamp: Date.now(),
       isGroup: false, // Adjust based on whether it’s a group chat
     });
 
-    await addDoc(
-      collection(db, 'chats' , chatId, 'messages'),
-      {
-        senderId: signInUser.id,
-        content: img ? null : msg,
-        timestamp: Date.now(),
-        type: img ? "image" : "text",
-        img: img || null,
-      }
-    );
+    const newMessageRef = await addDoc(collection(db, "chats", chatId, "messages"), {
+      senderId: signInUser.id,
+      content: img ? null : msg,
+      timestamp: Date.now(),
+      type: img ? "image" : "text",
+      img: img || null,
+    });
 
-    setImg("")
-    setMsg("")
-    // setSentMessage(!sentMessage)
-    dispatch(fetchChats())
-    
-}
+    const newMessageId = newMessageRef.id; // Get the ID of the newly created message
+    console.log("New message ID:", newMessageId);
+
+    setImg("");
+    setMsg("");
+    dispatch(fetchChats());
+    setIsLoading(false);
+  };
 
   const changeFileHandler = async ({ target }) => {
     const file = target.files[0];
+    setIsUploading(true);
     try {
       if (file) {
         const fileURL = await getUploadFileURL(file);
@@ -63,6 +69,7 @@ const SendMessageInput = ({selectedFriend, signInUser, setSentMessage, sentMessa
     } catch (error) {
       console.error("Error Occurred Making URL: ", error);
     }
+    setIsUploading(false);
   };
 
   // useEffect(()=> {
@@ -101,11 +108,29 @@ const SendMessageInput = ({selectedFriend, signInUser, setSentMessage, sentMessa
           onChange={changeFileHandler}
           hidden
         />
-        <img className="chat-gallery-icon" src={assets.gallery_blue_icon} alt="" />
+        {isUploading ? (
+          <div class="loader"></div>
+        ) : (
+          <img
+            className="chat-gallery-icon"
+            src={assets.gallery_blue_icon}
+            alt=""
+          />
+        )}
       </label>
-      <button type="submit" disabled={!msg && !img}>
-        <img className={`chat-send-icon ${!msg && !img ? "opacity-60 cursor-no-drop" : "cursor-pointer" }`} src={assets.send_button} alt="" />
-      </button>
+      {isLoading ? (
+        <div class="loader"></div>
+      ) : (
+        <button type="submit" disabled={!msg && !img}>
+          <img
+            className={`chat-send-icon ${
+              !msg && !img ? "opacity-60 cursor-no-drop" : "cursor-pointer"
+            }`}
+            src={assets.send_button}
+            alt=""
+          />
+        </button>
+      )}
     </form>
   );
 };
