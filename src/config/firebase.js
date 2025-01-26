@@ -4,6 +4,7 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   signOut,
+  updateProfile,
 } from "firebase/auth";
 import { addDoc, collection, doc, getFirestore, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
@@ -31,6 +32,10 @@ const signUp = async (username, email, password) => {
       password
     );
     const user = response.user;
+
+    await updateProfile(user, {
+      displayName: username, // Set the username as the displayName
+    });
 
     // Add user to Firestore
     await setDoc(doc(db, "users", user.uid), {

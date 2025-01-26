@@ -100,8 +100,49 @@
 .pic-name-bio p {
     color: gray;
     font-size: 11px;
-    max-width: 85%;
+    max-width: 25rem;
     text-align: center;
 }
 
+.line1 {
+    display: none;
+}
 
+
+
+@media screen and (max-width: 482px) {
+    .profile-container {
+        flex-direction: column;
+        gap: 20px;
+        border-radius: 0;
+    }
+    .profile-head {
+        text-align: center;
+    }
+    .profile-container form {
+        padding: 20px;
+    }
+    .profile-container form img {
+        width: 100px;
+        height: 100px;
+    }
+    .profile-container input, textarea {
+        font-size: 14px;
+    }
+    .profile-button {
+        font-size: 14px;
+    }
+    .pic-name-bio {
+        gap: 10px;
+        order: -1;
+    }
+    .pic-name-bio h3 {
+        font-size: 16px;
+    }
+    .pic-name-bio p {
+        font-size: 14px;
+    }
+    .line1 {
+        display: block;
+    }
+}

@@ -5,6 +5,7 @@ import "./Login.css";
 import { useForm } from "react-hook-form";
 import { signIn, signUp } from "../../config/firebase";
 import { useNavigate } from "react-router-dom";
+import { resetPassword } from "../../config/firbaseUtility";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -19,6 +20,8 @@ const Login = () => {
     if(formState === "Sign Up") {
       signUp(data.name, data.email, data.password)
       navigate('/')
+    } else if (formState === "resetPassword") {
+      resetPassword(data.email)
     } else {
       signIn(data.email, data.password)
       
@@ -35,7 +38,7 @@ const Login = () => {
         onSubmit={handleSubmit(signUpSubmit)}
       >
         <div className="login-input-div">
-          <h2 className="login-head">{formState}</h2>
+          <h2 className="login-head">{formState === "resetPassword" ? "Reset Password" : formState}</h2>
           {formState === "Sign Up" ? (
             <input
               className="login-input"
@@ -64,7 +67,7 @@ const Login = () => {
             <p style={{ color: "red", fontSize: "11px" }}>{errors.email.message}</p>
           )}
 
-          <input
+          {formState !== "resetPassword" ? <input
             className="login-input"
             type="password"
             placeholder="Enter Password"
@@ -81,19 +84,37 @@ const Login = () => {
                   "Password must include uppercase, lowercase, number, and special character",
               },
             })}
-          />
+          /> : ""}
           {errors.password && (
             <p style={{ color: "red", fontSize: "11px" }}>{errors.password.message}</p>
-          )}
+          )} 
         </div>
         <button type="submit" className="login-button">
-          {formState}
+          {formState === "resetPassword" ? "Send Reset Email" : formState}
         </button>
 
         <div className="login-terms">
-          <input type="checkbox" id="agree" name="agree" />
+          <input type="checkbox" id="agree" name="agree" required/>
           <label htmlFor="agree">I agree to the Terms and Conditions</label>
         </div>
+
+{/* ---- Reset Password ----- */}
+        <p className="login-forgot">
+          {formState === "resetPassword"
+            ? "Already have an account."
+            : "Reset the password."}{" "}
+          <span
+            onClick={() =>
+              formState !== "resetPassword"
+                ? setFormState("resetPassword")
+                : setFormState("Sign In")
+            }
+          >
+            {formState === "resetPassword" ? "Sign In" : "Reset"}
+          </span>
+        </p>
+
+{/* ---- SignUp ----- */}
         <p className="login-forgot">
           {formState === "Sign Up"
             ? "Already have an account."

@@ -2,33 +2,32 @@ import React from "react";
 import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import { logout } from "../../config/firebase";
+import EditProfile from "./EditProfile";
+import LogoutOption from "./LogoutOption";
 
 const LS_Header = ({ assets, setFilterUser, usersData }) => {
   return (
     <div className="ls-header">
       <div className="ls-nav">
+        {/* ---- LS Header Logo ---- */}
         <img className="ls-logo" src={assets.logo} alt="" />
-        <img className="ls-menu-icon" src={assets.menu_icon} alt="" />
+        <div className="ls-menu-icon">
+          <img src={assets.menu_icon} alt="" />
+        </div>
+
+        {/* ---- LS Dropdown Menu ---- */}
         <div className="ls-dropdown-menu shadow-lg">
           <ul>
-            <li>
-              <span className="flex gap-2">
-                <img className="ls-dropdown-icon" src={assets.edit_profile_icon} alt="" />
-                <p><Link to={"/profile"}>
-                  Edit Profile
-                </Link>
-                </p>
-              </span>
-            </li>
-            <li>
-              <span onClick={() => logout()} className="flex gap-2">
-                <img className="ls-dropdown-icon" src={assets.logout_icon} alt="" />
-                <p>Logout</p>
-              </span>
-            </li>
+            {/* ---- Edit Profile Option ---- */}
+            <EditProfile assets={assets} />
+
+            {/* ---- Logout Option ---- */}
+            <LogoutOption assets={assets} />
           </ul>
         </div>
       </div>
+
+      {/* ---- LS Search Bar ---- */}
       <div className="ls-search">
         <img className="ls-search-icon" src={assets.search_icon} alt="" />
         <SearchBar setFilterUser={setFilterUser} usersData={usersData} />

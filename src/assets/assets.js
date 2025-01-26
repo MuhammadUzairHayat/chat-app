@@ -25,6 +25,7 @@ import edit_profile_icon from './icons8-edit-profile-48.png'
 import logout_icon from './icons8-logout-50.png';
 import gallery_blue_icon from './gallery-blue-icon.png'
 import media_icon from './media_icon.png'
+import media_icon2 from './icons8-media-100.png'
 
 const assets = {
     avatar_icon,
@@ -53,7 +54,8 @@ const assets = {
     edit_profile_icon,
     logout_icon,
     gallery_blue_icon,
-    media_icon
+    media_icon,
+    media_icon2
 }
 
 export default assets;

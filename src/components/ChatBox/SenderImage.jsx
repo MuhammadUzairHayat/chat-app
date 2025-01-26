@@ -10,9 +10,10 @@ const SenderImage = ({assets, signInUser, msg, deleteMsg, setDeleteMsg, chatAbou
   const [isZoom, setIsZoom] = useState(false);
   const dispatch = useDispatch();
 
-  const deleteMsgHandler = () => {
+  const deleteMsgHandler = async () => {
     console.log(chatAbout.id, " ", msg.id);
-    deleteMessages(chatAbout.id, msg.id);
+    const lastMessage = chatAbout.lastMessageId === msg.id ? true : false;
+    await deleteMessages(chatAbout.id, msg.id, lastMessage, false, true);
     setDeleteMsg(!deleteMsg);
     dispatch(fetchChats());
   };

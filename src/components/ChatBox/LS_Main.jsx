@@ -4,6 +4,10 @@ import assets from "../../assets/assets";
 import { getMessages } from "../../config/firbaseUtility";
 import { useSelector } from "react-redux";
 import { AuthContext } from "../../context/AuthContext";
+import { auth, db } from "../../config/firebase";
+import { doc, updateDoc } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
+import EachUser from "./EachUser";
 
 const LS_Main = ({
   userAndChats,
@@ -11,52 +15,23 @@ const LS_Main = ({
   setSelectedFriend,
   selectedFriend,
 }) => {
-  //  console.log(`userAndChats: `, userAndChats);
+
+  // ---- Stored Data ----
+  const { authUser } = useContext(AuthContext);
+
+  // ---- Become Zero UnreadMsg Count ----
+  const unreadMsgZero = async (chatId) => {
+    await updateDoc(doc(db, "chats", chatId), {
+      [`unreadCount.${authUser?.uid}`]: 0,
+    });
+  };
+
   return (
     <div className="ls-main">
       {!userAndChats
         ? ""
         : userAndChats.map((eachUser, index) => (
-            <div
-              key={index}
-              className="ls-each-profile"
-              onClick={() =>
-                setSelectedFriend({
-                  user: eachUser.user,
-                  chats: eachUser.chats,
-                })
-              }
-            >
-              {/* {console.log(eachUser)} */}
-              <img
-                className="ls-profile-img"
-                src={eachUser?.user?.avatar || assets.avatar_icon}
-                alt=""
-              />
-              <div className="ls-profile-info">
-                <h1> {eachUser?.user?.username}</h1>
-                <p>
-                  {eachUser?.chats?.lastMessage === null &&
-                  eachUser?.chats?.lastImg === null ? (
-                    `No chatting yet`
-                  ) : eachUser?.chats?.lastMessage ? (
-                   eachUser?.chats?.lastMessage === 'del' ? 
-                    <i>🗑️ This message has been deleted</i>:
-                    eachUser?.chats?.lastMessage
-                  ) : (
-                    <span className="flex gap-1">
-                      {" "}
-                      <img
-                        className="w-3"
-                        src={assets.gallery_blue_icon}
-                        alt=""
-                      />{" "}
-                      Photo
-                    </span>
-                  )}
-                </p>
-              </div>
-            </div>
+             <EachUser eachUser={eachUser} key={index} setSelectedFriend={setSelectedFriend}/>
           ))}
     </div>
   );

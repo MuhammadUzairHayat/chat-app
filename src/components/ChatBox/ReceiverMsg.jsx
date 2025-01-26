@@ -18,7 +18,10 @@ const ReceiverMsg = ({
 
   const deleteMsgHandler = () => {
     console.log(chatAbout.id, " ", msg.id);
-    deleteMessages(chatAbout.id, msg?.id);
+    const lastMessage = chatAbout.lastMessageId === msg.id ? true : false;
+    const deletedMessage =
+      msg.content === "🗑️ This message has been deleted" ? true : false;
+    deleteMessages(chatAbout.id, msg?.id, lastMessage, deletedMessage);
     setDeleteMsg(!deleteMsg);
     dispatch(fetchChats());
   };
@@ -39,7 +42,15 @@ const ReceiverMsg = ({
             alt=""
           />
           <div className="menu-msg-div  r-msg-menu">
-            <p className={`msg   ${msg.content === "🗑️ The message has been deleted" ? `msg-del-clr` : `msg-clr`}`}>{msg.content}</p>
+            <p
+              className={`msg   ${
+                msg.content === "🗑️ This message has been deleted"
+                  ? `msg-del-clr`
+                  : `msg-clr`
+              }`}
+            >
+              {msg.content}
+            </p>
             <img
               className="r-message-menu"
               src={assets.menu_dots_icon}

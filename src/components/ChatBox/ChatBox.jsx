@@ -17,7 +17,14 @@ import { se } from "date-fns/locale";
 import { useMessageNotifications } from "../../hooks/useMessageNotification";
 
 // eslint-disable-next-line react/prop-types
-const ChatBox = ({ selectedFriend, setLSisVisible, LSisVisible }) => {
+const ChatBox = ({
+  selectedFriend,
+  setLSisVisible,
+  LSisVisible,
+  setRSisVisible,
+}) => {
+
+  // ---- Stored Data ----
   const { authUser } = useContext(AuthContext);
   const [receiver, setReceiver] = useState(null);
   const [chatAbout, setChatAbout] = useState(null);
@@ -31,7 +38,6 @@ const ChatBox = ({ selectedFriend, setLSisVisible, LSisVisible }) => {
   const bottomRef = useRef(null);
   const chatContainerRef = useRef(null);
 
-  // useMessageNotifications(authUser, receiver);
 
   useEffect(() => {
     if (chatsStatus === "succeeded" && selectedFriend) {
@@ -65,23 +71,28 @@ const ChatBox = ({ selectedFriend, setLSisVisible, LSisVisible }) => {
         <p className="text-gray-400 text-xs text-center px-2">
           App made by Unknown one Select User To Chat with him
         </p>
-        <p
+        <button
           onClick={() => setLSisVisible(!LSisVisible)}
-          className="bg-[#0289cc] text-white px-6 py-2 rounded-full mt-6"
+          className="bg-[#0289cc] text-white px-6 py-2 rounded-full mt-6 "
+          disabled={window.innerWidth >= "780" ? true : false}
         >
           chat-App
-        </p>
+        </button>
       </div>
     );
   } else {
     return (
       <div className="chat-box">
         {/* ---- Chat_Top_User_Bio -----*/}
-        <SelectedFriendBio assets={assets} selectedFriend={receiver} />
-        {/* ---- Chatting-Of-User ----- */}
+        <SelectedFriendBio
+          assets={assets}
+          selectedFriend={receiver}
+          setLSisVisible={setLSisVisible}
+          setRSisVisible={setRSisVisible}
+        />
 
+        {/* ---- Chatting-Of-User ----- */}
         <div className="chat-message" ref={chatContainerRef}>
-          {/* {console.log(chatMessages)} */}
           {!chatMessages ? (
             chatMessages === null ? (
               <div className="flex items-center justify-center h-full text-sm flex-col text-gray-700">
@@ -101,8 +112,6 @@ const ChatBox = ({ selectedFriend, setLSisVisible, LSisVisible }) => {
           ) : (
             chatMessages.map((msg, index) => (
               <div key={msg.id || index}>
-                {/* {console.log("Message is here: ", msg)} */}
-                {/* Add a unique key for each element */}
                 {/* --- Sender Messages or Receiver Messages --- */}
                 {msg.senderId === authUser.uid ? ( // Check if the message is from the sender
                   <>
@@ -154,7 +163,10 @@ const ChatBox = ({ selectedFriend, setLSisVisible, LSisVisible }) => {
           )}
 
           <button
-            onClick={() => setLSisVisible(!LSisVisible)}
+            onClick={() => {
+              setLSisVisible(!LSisVisible);
+              setRSisVisible(true);
+            }}
             className="start_chat_btn"
           >
             <img src={assets.logo_icon} alt="" />

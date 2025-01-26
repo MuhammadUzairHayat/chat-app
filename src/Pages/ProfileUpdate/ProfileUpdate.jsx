@@ -7,9 +7,11 @@ import { getUploadFileURL, updateUserProfile } from "../../config/firbaseUtility
 import { toast } from "react-toastify";
 // import  BookLoaderComponent  from "./Loader";
 import { AuthContext } from "../../context/AuthContext";
+import { Navigate, useNavigate } from "react-router-dom";
+import { use } from "react";
 
 const ProfileUpdate = () => {
-  const {authUser, setAuthUser} = useContext(AuthContext)
+  const {authUser} = useContext(AuthContext)
   const { status, users, error } = useSelector((state) => state.users);
 
   const [currentUser, setCurrentUser] = useState(null)
@@ -17,6 +19,7 @@ const ProfileUpdate = () => {
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
   const [updateLoading, setUpdateLoading] = useState(false);
+  const navigate = useNavigate();
   
   console.log(`update User: `, users)
   console.log(`Current User: `, authUser.uid)
@@ -58,6 +61,7 @@ const ProfileUpdate = () => {
       toast.error("Failed to update profile. Error Occurred: ", error);
     } finally {
       setUpdateLoading(false); // End loading state
+      navigate('/');
     }
   };
 
@@ -86,9 +90,10 @@ const ProfileUpdate = () => {
     <div className="profile">
        {status === "loading" ? `<BookLoaderComponent />` :
              <div className="profile-container">
-
              <form onSubmit={UpdateProfileHandler}>
+               <hr className="line1"/>
              <h2 className="profile-head">Update Profile</h2>
+               <hr className="line2" />
              <label htmlFor="profile-avatar">
                <input
                  type="file"
@@ -129,7 +134,7 @@ const ProfileUpdate = () => {
                src={imagePreview || assets.logo_icon}
                alt=""
              />
-             <h3>{name}</h3>
+             <h3>{authUser.displayName}</h3>
              <p>{bio}</p>
            </div></div>}
       

@@ -4,12 +4,14 @@ import { deleteMessages } from "../../config/firbaseUtility";
 import { fetchChats } from "../../Features/chatSlice";
 import { useDispatch } from "react-redux";
 
-const ReceiverImage = ({   assets,
+const ReceiverImage = ({
+  assets,
   selectedFriend,
   msg,
   deleteMsg,
   setDeleteMsg,
-  chatAbout,}) => {
+  chatAbout,
+}) => {
   const [timestamp, setTimestamp] = useState(msg.timestamp);
   const [isShowMenu, setIsShowMenu] = useState(false);
 
@@ -18,11 +20,11 @@ const ReceiverImage = ({   assets,
 
   const deleteMsgHandler = async () => {
     console.log(chatAbout.id, " ", msg.id);
-    await deleteMessages(chatAbout.id, msg?.id);
+    const lastMessage = chatAbout.lastMessageId === msg.id ? true : false;
+    await deleteMessages(chatAbout.id, msg.id, lastMessage, false, true);
     dispatch(fetchChats());
   };
 
-  
   useEffect(() => {
     const timerId = setInterval(() => {
       setTimestamp(msg.timestamp);
@@ -50,9 +52,13 @@ const ReceiverImage = ({   assets,
               className="r-message-menu"
               src={assets.menu_dots_icon}
               alt=""
-              onClick={()=> setIsShowMenu(!isShowMenu)}
+              onClick={() => setIsShowMenu(!isShowMenu)}
             />
-            <div className={`menu-list left-[100%] ${!isShowMenu ? "dis-none" : ""}`}>
+            <div
+              className={`menu-list left-[100%] ${
+                !isShowMenu ? "dis-none" : ""
+              }`}
+            >
               <ul onMouseLeave={() => setIsShowMenu(false)}>
                 <li onClick={deleteMsgHandler}>Delete</li>
               </ul>

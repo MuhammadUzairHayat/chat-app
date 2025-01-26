@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import assets from "../../assets/assets";
 import { getUploadFileURL } from "../../config/firbaseUtility";
 import { db } from "../../config/firebase";
-import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, increment, setDoc, updateDoc } from "firebase/firestore";
 import { AuthContext } from "../../context/AuthContext";
 import { useDispatch, useSelector } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit";
@@ -32,25 +32,31 @@ const SendMessageInput = ({
     e.preventDefault();
     const chatId = [signInUser?.id, selectedFriend?.id].sort().join("_");
     e.target.reset();
-
     await setDoc(doc(db, "chats", chatId), {
       participants: [signInUser.id, selectedFriend.id], // Replace with actual user IDs
       lastMessage: img ? null : msg,
       lastImg: img || null,
       lastMessageTimestamp: Date.now(),
+      lastMessageId: null,
       isGroup: false, // Adjust based on whether it’s a group chat
-    });
+    }, { merge: true }); 
 
     const newMessageRef = await addDoc(collection(db, "chats", chatId, "messages"), {
       senderId: signInUser.id,
       content: img ? null : msg,
       timestamp: Date.now(),
       type: img ? "image" : "text",
-      img: img || null,
+      img: img || null
     });
 
     const newMessageId = newMessageRef.id; // Get the ID of the newly created message
     console.log("New message ID:", newMessageId);
+
+    await updateDoc(doc(db, "chats", chatId), {
+      lastMessageId: newMessageId,
+      [`unreadCount.${selectedFriend?.id}`]: increment(1),
+      mediaCount: img ? increment(1) : increment(0)
+    });
 
     setImg("");
     setMsg("");
@@ -109,7 +115,7 @@ const SendMessageInput = ({
           hidden
         />
         {isUploading ? (
-          <div class="loader"></div>
+          <div className="loader"></div>
         ) : (
           <img
             className="chat-gallery-icon"
@@ -119,7 +125,7 @@ const SendMessageInput = ({
         )}
       </label>
       {isLoading ? (
-        <div class="loader"></div>
+        <div className="loader"></div>
       ) : (
         <button type="submit" disabled={!msg && !img}>
           <img

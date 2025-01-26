@@ -1,8 +1,9 @@
 .ls {
   background-color: #56028f;
   height: 100vh;
-  transition: all .3s;
+  transition: all 0.3s;
   z-index: 1000;
+  /* overflow-x: hidden; */
   /* overflow-y: hidden; */
 }
 
@@ -34,6 +35,15 @@
   position: relative;
   max-width: 20px;
   cursor: pointer;
+  background-color: transparent;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    /* background-color: red; */
+    transform: scale(4);
+  }
 }
 
 .ls-dropdown-menu {
@@ -150,16 +160,27 @@
   align-items: center;
   gap: 10px;
   padding-block: 3px;
-  margin-left: 5px;
+  /* margin-left: 5px; */
   width: 100%;
   /* border: 1px solid #9c12f8; */
-  box-shadow: 1px 15px 20px 2px rgba(0, 0, 0, 0.1);
-  border-top-left-radius: 3rcap;
-  border-bottom-left-radius: 3rcap;
-  cursor: pointer;
+
 }
 
-.ls-each-profile:hover {
+.ls-profile-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  padding-right: 8px;
+  /* border: 1px solid #9c12f8; */
+  box-shadow: 1px 15px 20px 2px rgba(0, 0, 0, 0.1);
+  border-top-left-radius: 4rcap;
+  border-bottom-left-radius: 4rcap;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.ls-profile-container:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -179,18 +200,43 @@
 .ls-profile-info h1 {
   font-size: 14px;
   color: white;
+  text-wrap: nowrap;
   /* text-transform: uppercase; */
   margin-bottom: 5px;
+  max-width: 14rem;
+  padding-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .ls-profile-info p {
   font-size: 11px;
   color: rgb(179, 177, 174);
   text-wrap: nowrap;
+  max-width: 14rem;
+  min-width: 5rem;
+  padding-right: 5px;
+  /* width: 16rem; */
+  overflow: hidden;
+  /* text-overflow: hidden; */
+  text-overflow: ellipsis;
+  padding-bottom: 1px;
+}
+
+.unread {
+  background-color: #077eff;
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .LS_hide {
-    transform: translateX(-19rem);
+  transform: translateX(-22rem);
 }
 
 /* .LS_unhide {
@@ -199,7 +245,6 @@
 .close_LS_btn {
   display: none;
 }
-
 
 @media screen and (min-width: 769px) {
   .ls {
@@ -218,15 +263,79 @@
     display: block;
     position: absolute;
     z-index: 100;
-    left : 102%;
-    top: 5px;
+    left: 100%;
     color: white;
-    background-color: #56028f;
-    width: 2rem;
+    /* background-color: #56028f; */
+    width: 30px;
     border-radius: 50%;
   }
 
   .ls-container {
     /* display: none; */
+  }
+  .LS_hide {
+    transform: translateX(-28rem);
+  }
+
+}
+
+/* @media screen and (max-width: 1200px) and (min-width: 1100px) {
+
+  .ls-profile-info p{
+    max-width: 14rem;
+  }
+
+} */
+
+@media screen and (max-width: 1025px) and (min-width: 769px) {
+
+  .ls-profile-info p{
+    max-width: 10rem;
+  }
+
+}
+
+@media screen and (max-width: 768px) and (min-width: 431px) {
+  .LS_hide {
+    transform: translateX(-30rem);
+  }
+  .ls-profile-info p{
+    max-width: 15rem;
+  }
+} 
+
+@media screen and (max-width: 430px) and (min-width: 379px) {
+  .LS_hide {
+    transform: translateX(-30rem);
+  }
+  .ls-profile-info p{
+    max-width: 17rem;
+  }
+} 
+
+@media screen and (max-width: 378px) {
+  .ls-profile-info {
+    max-width: 14rem;
+  }
+}
+
+@media screen and (max-width: 321px) {
+  .ls-profile-info {
+    max-width: 10.8rem;
+  }
+}
+
+
+@media screen and (max-width: 780px) and (min-width: 350px) {
+  .ls {
+      width: 100%;
+      max-width: 21rem;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .ls {
+      max-width: 18rem;
+      width: 100%;
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SelectedFriendBio = ({selectedFriend, assets}) => {
+const SelectedFriendBio = ({selectedFriend, assets, setRSisVisible, setLSisVisible}) => {
   return (
     <div className="chat-user">
     <div className="chat-user-intro">
@@ -24,9 +24,10 @@ const SelectedFriendBio = ({selectedFriend, assets}) => {
     </div>
     <img
       style={{ width: "20px", height: "20px" }}
-      className="chat-info-icon"
+      className={"chat-info-icon "+ (window.innerWidth >= '780' ? "hidden": "")}
       src={assets.info_icon}
       alt=""
+      onClick={()=> {setRSisVisible(prev=> !prev); setLSisVisible(true)}}
     />
   </div>
   )

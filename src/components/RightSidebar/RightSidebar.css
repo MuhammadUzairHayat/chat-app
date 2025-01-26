@@ -1,6 +1,15 @@
 .rs {
     display: flex;
     flex-direction: column;
+    transition: all 0.3s;
+}
+
+.rs-close-toggle {
+    height: 30px;
+    width: 30px;
+    position: absolute;
+    z-index: 2;
+    right: 100%;
 }
 
 .rs-user-bio {
@@ -58,7 +67,7 @@
     background-color: #56028f;
     border: none;
     flex: 1;
-    max-height: calc(100vh - 15.4rem) ;
+    max-height: calc(100vh - 14.4rem) ;
     /* overflow-y: auto; */
     border-top: 3px solid white;
     /* border-left: 3px solid #56028f;
@@ -78,23 +87,43 @@
 }
 
 .rs-media-items {
+    position: relative;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: 6px;
     place-items: center;
     justify-content: center;
     padding-inline: 12px;
-    max-height: calc(100vh - 20rem);
+    max-height: calc(100vh - 19rem);
     overflow-y: scroll;
     padding-bottom: 4rem;
+    /* overflow-x: visible; */
 }
 
 .rs-media-items img {
-    width: 100px; /* Set the desired width */
+    width: 150px; /* Set the desired width */
     height: 80px; /* Set the desired height */
     object-fit: cover; /* Ensures the image covers the entire area */
     border-radius: 5px; /* Optional: Adds rounded corners */
+    transition: all 0.5s;
   }
+
+.magnified {
+    position: static;
+    z-index: 10;
+    transform: scale(6);
+    transform-origin: center right;
+    transition: all 0.5s;
+    /* bottom: 10px; */
+    margin-top: -150px;
+}
+
+.unmagnified {
+    transform: scale(1);
+    transition: all 0.5s;
+    /* transform-origin: left right; */
+    z-index: 1;
+}
 
 .rs-logout-div {
     position: absolute; /* Positioned relative to the parent container */
@@ -124,7 +153,36 @@
 }
 
 @media screen and (max-width: 780px) {
+    
+    .rs-unhide {
+        transform: translateX(25rem);
+    }
+    
     .rs {
-        display: none;
+        /* display: none; */
+        position: absolute;
+        /* transform: translateX(16rem); */
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 2;
+    }
+
+    .rs-media-items img{
+        width: 10rem;
+    }
+}
+
+@media screen and (max-width: 780px) and (min-width: 350px) {
+    .rs {
+        width: 100%;
+        max-width: 21rem;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .rs {
+        max-width: 18rem;
+        width: 100%;
     }
 }
