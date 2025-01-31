@@ -83,7 +83,7 @@ const SendMessageInput = ({
   // }, [status])
 
   return (
-    <form onSubmit={sendMessageHandler} className="chat-send-input">
+    <form onSubmit={sendMessageHandler} className="chat-send-input z-50">
       {img ? (
         <span className={`flex-1 ` + (img ? "cursor-not-allowed" : " ")}>
           {" "}
@@ -106,7 +106,8 @@ const SendMessageInput = ({
           disabled={img}
         />
       )}
-      <label htmlFor="gallery">
+      {/* <div className="flex flex-shrink-0 gap-"> */}
+      <label className="flex-shrink-0" htmlFor="gallery">
         <input
           type="file"
           id="gallery"
@@ -127,7 +128,7 @@ const SendMessageInput = ({
       {isLoading ? (
         <div className="loader"></div>
       ) : (
-        <button type="submit" disabled={!msg && !img}>
+        <button className="flex-shrink-0" type="submit" disabled={!msg && !img}>
           <img
             className={`chat-send-icon ${
               !msg && !img ? "opacity-60 cursor-no-drop" : "cursor-pointer"
@@ -137,6 +138,7 @@ const SendMessageInput = ({
           />
         </button>
       )}
+      {/* </div> */}
     </form>
   );
 };
