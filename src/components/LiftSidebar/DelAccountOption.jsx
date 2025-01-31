@@ -13,15 +13,14 @@ import { toast } from "react-toastify";
 const DelAccountOption = () => {
   const { openModal, closeModal } = useDelModal();
 
-  const handleDeleteAccount = async (password) => {
+  const handleDeleteAccount = async (email, password) => {
     console.log("Password entered:", password);
     try {
-      deleteAccountAndHandleChats(password);
+      deleteAccountAndHandleChats(email, password);
     } catch (error) {
       toast.error(error.code.split("/")[1].split("-").join(" "));
     } finally {
       closeModal();
-      toast.success("Account deleted successfully");  
     }
   };
 

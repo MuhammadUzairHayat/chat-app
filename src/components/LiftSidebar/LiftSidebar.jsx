@@ -68,7 +68,7 @@ const LiftSidebar = ({
   return (
     <div className="ls-container">
       <div className={`ls  ${LSisVisible ? `LS_hide` : "LS_unhide "}`}>
-
+      <section>
         {/* ---- LiftSidebar Closing Toggle ---- */}
         <button
           onClick={() => setLSisVisible(!LSisVisible)}
@@ -92,6 +92,7 @@ const LiftSidebar = ({
           setSelectedFriend={setSelectedFriend}
           selectedFriend={selectedFriend}
         />
+      </section>
       </div>
     </div>
   );

@@ -29,7 +29,7 @@ const LS_Main = ({
   return (
     <div className="ls-main">
       {!userAndChats
-        ? ""
+        ? <div className="ls-loader"></div>
         : userAndChats.map((eachUser, index) => (
              <EachUser eachUser={eachUser} key={index} setSelectedFriend={setSelectedFriend} unreadMsgZero={unreadMsgZero}/>
           ))}
