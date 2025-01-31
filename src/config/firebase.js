@@ -4,9 +4,25 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   signOut,
+  deleteUser,
   updateProfile,
+  GoogleAuthProvider,
+  reauthenticateWithPopup,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
 } from "firebase/auth";
-import { addDoc, collection, doc, getFirestore, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  getFirestore,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { toast } from "react-toastify";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -41,7 +57,7 @@ const signUp = async (username, email, password) => {
     await setDoc(doc(db, "users", user.uid), {
       id: user.uid,
       avatar: "",
-      username: username.toLowerCase(),
+      username: username,
       email: email,
       createdAt: Date.now(),
       bio: "Hey, I’m using chat-app",
@@ -97,3 +113,76 @@ const logout = async () => {
 };
 
 export { signUp, signIn, logout, auth, db };
+
+export const deleteAccountAndHandleChats = async (password) => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) {
+    console.log("No user is currently signed in.");
+    return;
+  }
+
+  const userId = user.uid;
+
+  try {
+    // Reauthenticate the user
+    const credential = EmailAuthProvider.credential(user.email, password);
+    await reauthenticateWithCredential(user, credential);
+
+    // Check chats and handle participants
+    await handleChatsForDeletedUser(userId);
+
+    // Delete the user's document in the "users" collection
+    await deleteDoc(doc(db, "users", userId));
+
+    // Delete the user's Firebase Authentication account
+    await deleteUser(user);
+
+    toast.call("Account and associated data deleted successfully.");
+  } catch (error) {
+    if (error.code === "auth/requires-recent-login") {
+      toast.error("Reauthentication required. Ask the user to log in again.");
+    } else {
+      toast.error("Error deleting account or handling chats:", error);
+      console.error("Error deleting account or handling chats:", error);
+    }
+  }
+};
+
+export const handleChatsForDeletedUser = async (userId) => {
+  const userChatsQuery = query(
+    collection(db, "chats"),
+    where("participants", "array-contains", userId)
+  );
+  const querySnapshot = await getDocs(userChatsQuery);
+
+  for (const chatDoc of querySnapshot.docs) {
+    const chatData = chatDoc.data();
+
+      // delete the chat entirely
+      await deleteDoc(doc(db, "chats", chatDoc.id));
+      console.log(`Deleted chat: ${chatDoc.id}`);
+
+    }
+  }
+
+
+// const reauthenticateWithGoogle = async () => {
+//   const auth = getAuth();
+//   const user = auth.currentUser;
+
+//   if (!user) {
+//     console.log("No user is currently signed in.");
+//     return;
+//   }
+
+//   try {
+//     const provider = new GoogleAuthProvider();
+//     await reauthenticateWithPopup(auth, provider);
+
+//     console.log("Reauthenticated successfully.");
+//   } catch (error) {
+//     console.error("Error reauthenticating:", error.message);
+//   }
+// };

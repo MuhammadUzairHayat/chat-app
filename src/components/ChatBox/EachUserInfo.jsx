@@ -8,7 +8,11 @@ const EachUserInfo = ({ eachUser }) => {
       <h1> {eachUser?.user?.username}</h1>
       <p>
         {/* ---- No Chatting Yet ---- */}
-        {!eachUser?.chats?.lastMessage && !eachUser?.chats?.lastImg ? (
+        {!eachUser?.chats?.lastMessage &&
+        !eachUser?.chats?.lastImg &&
+        !(eachUser?.chats?.messages
+          ? Array.from(eachUser.chats.messages).length
+          : 0) ? (
           `No chatting yet`
         ) : // ---- Message has deleted ----
         eachUser?.chats?.lastMessage ? (

@@ -3,21 +3,17 @@ import React, { useEffect, useState } from "react";
 import { deleteMessages } from "../../config/firbaseUtility";
 import { fetchChats } from "../../Features/chatSlice";
 import { useDispatch } from "react-redux";
+import assets from "../../assets/assets";
+import ImgToShow from "../../context/ImageModal/ImgToShow";
 
-const ReceiverImage = ({
-  assets,
-  selectedFriend,
-  msg,
-  deleteMsg,
-  setDeleteMsg,
-  chatAbout,
-}) => {
+const ReceiverImage = ({ selectedFriend, msg, chatAbout }) => {
+  // ---- Stored Data ----
   const [timestamp, setTimestamp] = useState(msg.timestamp);
   const [isShowMenu, setIsShowMenu] = useState(false);
-
   const [isZoom, setIsZoom] = useState(false);
   const dispatch = useDispatch();
 
+  // ---- Deletion Image ----
   const deleteMsgHandler = async () => {
     console.log(chatAbout.id, " ", msg.id);
     const lastMessage = chatAbout.lastMessageId === msg.id ? true : false;
@@ -25,6 +21,7 @@ const ReceiverImage = ({
     dispatch(fetchChats());
   };
 
+  // ---- Changing Time Ago ----
   useEffect(() => {
     const timerId = setInterval(() => {
       setTimestamp(msg.timestamp);
@@ -36,24 +33,31 @@ const ReceiverImage = ({
     <div className="chat-message-r">
       <div className="chat-message-content">
         <div className="chat-avatar-time">
+          {/* ---- Message Avatar ---- */}
           <img
             className="msg-avatar"
             src={selectedFriend.avatar || assets.profile_img}
             alt=""
           />
-          <div className="menu-msg-div r-img-div">
-            <img
-              className={`receive-img ${isZoom ? "receive-img-zoom" : ""}`}
-              src={msg.img || assets.pic2}
-              alt=""
-              onClick={() => setIsZoom(!isZoom)}
+          <div className="r-ImgMenu-sect">
+            {/* ---- Message Image ---- */}
+            <ImgToShow
+              // className={`receive-img ${isZoom ? "receive-img-zoom" : ""}`}
+              imageUrl={msg.img || assets.pic2}
+              // alt=""
+              // onClick={() => setIsZoom(!isZoom)}
             />
+
+            {/* --- Message Menu Icon ---- */}
+            <div className="r-message-menu">
             <img
-              className="r-message-menu"
-              src={assets.menu_dots_icon}
+             onClick={() => setIsShowMenu(!isShowMenu)}
+              src={assets.menu_icon_white}
               alt=""
-              onClick={() => setIsShowMenu(!isShowMenu)}
+              imageUrl={assets}
             />
+
+            {/* ---- Message Menu Dropdown ---- */}
             <div
               className={`menu-list left-[100%] ${
                 !isShowMenu ? "dis-none" : ""
@@ -63,8 +67,11 @@ const ReceiverImage = ({
                 <li onClick={deleteMsgHandler}>Delete</li>
               </ul>
             </div>
+            </div>
           </div>
         </div>
+
+        {/* ---- Message Time Ago ---- */}
         <span className="chat-time">
           {formatDistanceToNow(new Date(timestamp))} ago
         </span>

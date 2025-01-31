@@ -15,35 +15,38 @@ const LiftSidebar = ({
   selectedFriend,
   setLSisVisible,
 }) => {
+
+  // ---- Data Stored ---
   const [filterUser, setFilterUser] = useState([]);
   const { status, users, error } = useSelector((state) => state.users);
   const { authUser } = useContext(AuthContext);
   const [userAndChats, setUserAndChats] = useState(null);
   const [sentMessage, setSentMessage] = useState(true);
+  const [signInUser, setSignInUser] = useState(null);
   const { chatsStatus, chats, chatsError } = useSelector(
     (state) => state.chats
   );
 
-  // console.log(`chats LiftSidebar:  `, chats);
-
-  const [signInUser, setSignInUser] = useState(null);
-
   useEffect(() => {
     try {
+
+      // ---- Storing Signin User Full Data ----
       if (status === "succeeded") {
         const result = users.find((user) => user.id === authUser.uid);
         setSignInUser(result);
       }
+
+      // ---- Storing Each User with own Chats ----
       if (chatsStatus === "succeeded" && chats) {
-        // console.log(`Check SelectedFriend:  `, selectedFriend.username);
-        if (filterUser && filterUser.length > 0) {
-          // console.log(`Real Chats: `, chats);
+
+        // filterUser filtered in LS_Header
+        if (filterUser && filterUser.length > 0) { 
+
+        // ---- Storing Each User with own Chats in userAndChats ----
           const tempData = filterUser.map((user) => {
-            // console.log(`User: `, user);
             const chatsData = chats.find((chat) => chat.participants.includes(authUser.uid) && chat.participants.includes(user.id) );
             return { user, chats: chatsData || null};
           });
-          // console.log("TempSelection: ", tempData);
           setUserAndChats(tempData);
         }
       }
@@ -62,13 +65,11 @@ const LiftSidebar = ({
     filterUser,
   ]);
 
-  // if (status !== "succeeded") {
-  //   return <div> Loading ... </div>;
-  // }
-
   return (
     <div className="ls-container">
       <div className={`ls  ${LSisVisible ? `LS_hide` : "LS_unhide "}`}>
+
+        {/* ---- LiftSidebar Closing Toggle ---- */}
         <button
           onClick={() => setLSisVisible(!LSisVisible)}
           className="close_LS_btn"
@@ -76,6 +77,7 @@ const LiftSidebar = ({
           {" "}
           <img src={assets.cross_icon} alt="" />
         </button>
+
         {/* ---- LeftSidebar Header ---- */}
         <LS_Header
           assets={assets}
@@ -83,7 +85,6 @@ const LiftSidebar = ({
           usersData={users}
         />
 
-        {/* console.log(`the userAndChats: `, userAndChats) */}
         {/* ---- LeftSidebar Main ---- */}
         <LS_Main
           userAndChats={userAndChats}

@@ -4,6 +4,7 @@ import SearchBar from "./SearchBar";
 import { logout } from "../../config/firebase";
 import EditProfile from "./EditProfile";
 import LogoutOption from "./LogoutOption";
+import DelAccountOption from "./DelAccountOption";
 
 const LS_Header = ({ assets, setFilterUser, usersData }) => {
   return (
@@ -23,6 +24,9 @@ const LS_Header = ({ assets, setFilterUser, usersData }) => {
 
             {/* ---- Logout Option ---- */}
             <LogoutOption assets={assets} />
+
+            {/* ---- Delete Account Option ---- */}
+             <DelAccountOption />
           </ul>
         </div>
       </div>

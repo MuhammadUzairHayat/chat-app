@@ -3,6 +3,8 @@ import React from "react";
 const SelectedUserBio = ({assets, receiver}) => {
   return (
     <div className="rs-user-bio">
+
+      {/* ---- Avatar ---- */}
       <img
         className="rs-bio-img"
         src={
@@ -10,6 +12,8 @@ const SelectedUserBio = ({assets, receiver}) => {
         }
         alt=""
       />
+
+      {/* ---- Name ---- */}
       <h3 className="rs-bio-name">
         {!receiver
           ? `Chat-App`
@@ -23,6 +27,7 @@ const SelectedUserBio = ({assets, receiver}) => {
         {receiver && <span className="chat-user-status">online</span>}
       </h3>
 
+    {/* ---- Bio Describe ---- */}
       <p className="rs-bio-desc">
         {!receiver
           ? `Welcome! Make your Friends Here 😊`

@@ -31,7 +31,7 @@ const LS_Main = ({
       {!userAndChats
         ? ""
         : userAndChats.map((eachUser, index) => (
-             <EachUser eachUser={eachUser} key={index} setSelectedFriend={setSelectedFriend}/>
+             <EachUser eachUser={eachUser} key={index} setSelectedFriend={setSelectedFriend} unreadMsgZero={unreadMsgZero}/>
           ))}
     </div>
   );

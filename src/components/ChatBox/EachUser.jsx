@@ -4,10 +4,10 @@ import assets from "../../assets/assets";
 import EachUserUnread from "./EachUserUnread";
 import EachUserInfo from "./EachUserInfo";
 
-const EachUser = ({ eachUser, setSelectedFriend }) => {
+const EachUser = ({ eachUser, setSelectedFriend, unreadMsgZero }) => {
   const { authUser } = useContext(AuthContext);
   return (
-    <div
+    <div 
       className="ls-profile-container"
       onClick={() => {
         setSelectedFriend({

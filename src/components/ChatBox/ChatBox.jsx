@@ -15,6 +15,12 @@ import { getMessages } from "../../config/firbaseUtility";
 import { set } from "date-fns";
 import { se } from "date-fns/locale";
 import { useMessageNotifications } from "../../hooks/useMessageNotification";
+import ChatDefaultView from "./ChatDefaultView";
+import SenderChatting from "./SenderChatting";
+import ReceiverChatting from "./ReceiverChatting";
+import UserNoChat from "./UserNoChat";
+import ImgModal from "../../context/ImageModal/ImgModal";
+import ImgToShow from "../../context/ImageModal/ImgToShow";
 
 // eslint-disable-next-line react/prop-types
 const ChatBox = ({
@@ -23,7 +29,6 @@ const ChatBox = ({
   LSisVisible,
   setRSisVisible,
 }) => {
-
   // ---- Stored Data ----
   const { authUser } = useContext(AuthContext);
   const [receiver, setReceiver] = useState(null);
@@ -38,8 +43,8 @@ const ChatBox = ({
   const bottomRef = useRef(null);
   const chatContainerRef = useRef(null);
 
-
   useEffect(() => {
+    // ---- Setting Receiver Data ----
     if (chatsStatus === "succeeded" && selectedFriend) {
       const result = users.find((user) => user.id === authUser.uid);
       setSignInUser(result);
@@ -51,39 +56,23 @@ const ChatBox = ({
       setReceiver(selectedFriend.user);
       setChatAbout(gettingChat || null);
       setChatMessages(gettingChat?.messages || null);
-      if (bottomRef.current) {
-        // setTimeout(() => {
-        //   bottomRef.current.scrollIntoView({ behavior: 'smooth' });
-        // }, 2000);
-      }
+      // if (bottomRef.current) {
+      //   setTimeout(() => {
+      //     bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+      //   }, 2000);
+      // }
     }
   }, [selectedFriend, chatsStatus, chats]);
 
-  // if (status === "loading" && chatsStatus !== "succeeded") {
-  //   return <div className="flex items-center justify-center ">loading</div>;
-  // }
   if (!chatAbout && !chatMessages && !selectedFriend) {
     return (
-      <div className="flex items-center justify-center flex-col h-[100vh]">
-        {" "}
-        <img className="max-w-40 opacity-90" src={assets.logo_icon} alt="" />
-        <h2 className="text-[#333]"> Welcome to Chat-App </h2>
-        <p className="text-gray-400 text-xs text-center px-2">
-          App made by Unknown one Select User To Chat with him
-        </p>
-        <button
-          onClick={() => setLSisVisible(!LSisVisible)}
-          className="bg-[#0289cc] text-white px-6 py-2 rounded-full mt-6 "
-          disabled={window.innerWidth >= "780" ? true : false}
-        >
-          chat-App
-        </button>
-      </div>
+      // ---- ChatBox Default View ----
+      <ChatDefaultView assets={assets} setLSisVisible={setLSisVisible} />
     );
   } else {
     return (
       <div className="chat-box">
-        {/* ---- Chat_Top_User_Bio -----*/}
+        {/* ---- ChatBox Receiver Info -----*/}
         <SelectedFriendBio
           assets={assets}
           selectedFriend={receiver}
@@ -91,78 +80,34 @@ const ChatBox = ({
           setRSisVisible={setRSisVisible}
         />
 
-        {/* ---- Chatting-Of-User ----- */}
+        {/* ---- ChatBox All Chats ----- */}
         <div className="chat-message" ref={chatContainerRef}>
           {!chatMessages ? (
-            chatMessages === null ? (
-              <div className="flex items-center justify-center h-full text-sm flex-col text-gray-700">
-                {" "}
-                <img
-                  className="max-w-32 max-h-32"
-                  src={assets.logo_icon}
-                  alt=""
-                />
-                chat with this Friend
-              </div>
-            ) : (
-              <div>
-                <div>chats Uploading...</div>
-              </div>
-            )
+            // ---- User Having No chat View ----
+            <UserNoChat chatMessages={chatMessages} />
           ) : (
             chatMessages.map((msg, index) => (
               <div key={msg.id || index}>
-                {/* --- Sender Messages or Receiver Messages --- */}
-                {msg.senderId === authUser.uid ? ( // Check if the message is from the sender
-                  <>
-                    {msg.type === "text" ? (
-                      <SenderMsg
-                        assets={assets}
-                        signInUser={signInUser}
-                        msg={msg}
-                        deleteMsg={sentMessage}
-                        setDeleteMsg={setSentMessage}
-                        chatAbout={chatAbout}
-                      />
-                    ) : (
-                      <SenderImage
-                        assets={assets}
-                        signInUser={signInUser}
-                        msg={msg}
-                        deleteMsg={sentMessage}
-                        setDeleteMsg={setSentMessage}
-                        chatAbout={chatAbout}
-                      />
-                    )}
-                  </>
+                {/* --- Check Messages if from Receiver OR Sender --- */}
+                {msg.senderId === authUser.uid ? (
+                  // ---- Sender Chatting ----
+                  <SenderChatting
+                    signInUser={signInUser}
+                    chatAbout={chatAbout}
+                    msg={msg}
+                  />
                 ) : (
-                  <>
-                    {msg.type === "text" ? (
-                      <ReceiverMsg
-                        assets={assets}
-                        selectedFriend={receiver}
-                        msg={msg}
-                        deleteMsg={sentMessage}
-                        setDeleteMsg={setSentMessage}
-                        chatAbout={chatAbout}
-                      />
-                    ) : (
-                      <ReceiverImage
-                        assets={assets}
-                        selectedFriend={receiver}
-                        msg={msg}
-                        deleteMsg={sentMessage}
-                        setDeleteMsg={setSentMessage}
-                        chatAbout={chatAbout}
-                      />
-                    )}
-                  </>
+                  // ---- Receiver Chatting ----
+                  <ReceiverChatting
+                    receiver={receiver}
+                    msg={msg}
+                    chatAbout={chatAbout}
+                  />
                 )}
               </div>
             ))
           )}
-
-          <button
+          <button 
             onClick={() => {
               setLSisVisible(!LSisVisible);
               setRSisVisible(true);

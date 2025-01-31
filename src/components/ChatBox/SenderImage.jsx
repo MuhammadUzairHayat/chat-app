@@ -3,58 +3,66 @@ import React, { useEffect, useState } from "react";
 import { deleteMessages } from "../../config/firbaseUtility";
 import { fetchChats } from "../../Features/chatSlice";
 import { useDispatch } from "react-redux";
+import assets from "../../assets/assets";
+import ImgToShow from "../../context/ImageModal/ImgToShow";
 
-const SenderImage = ({assets, signInUser, msg, deleteMsg, setDeleteMsg, chatAbout}) => {
+const SenderImage = ({ signInUser, msg, chatAbout }) => {
+  // ---- Stored Data ----
   const [timestamp, setTimestamp] = useState(msg.timestamp);
   const [isShowMenu, setIsShowMenu] = useState(false);
-  const [isZoom, setIsZoom] = useState(false);
   const dispatch = useDispatch();
 
+  // ---- Deletion Sender Image Message ----
   const deleteMsgHandler = async () => {
     console.log(chatAbout.id, " ", msg.id);
     const lastMessage = chatAbout.lastMessageId === msg.id ? true : false;
     await deleteMessages(chatAbout.id, msg.id, lastMessage, false, true);
-    setDeleteMsg(!deleteMsg);
+    // ---- Fetching Chats After Deletion ----ٖ
     dispatch(fetchChats());
   };
 
+  // ---- Changing Time Ago ----
   useEffect(() => {
     const timerId = setInterval(() => {
-      // console.log(`Minute Passed Checked`)
       setTimestamp(msg.timestamp);
     }, 60000);
 
     return () => clearInterval(timerId);
   }, [msg.timestamp]);
+
   return (
     <div className="chat-message-s text-msg">
       <div className="chat-message-content">
         <div className="chat-avatar-time">
+          {/* ---- Message Avatar ---- */}
           <img
             className="msg-avatar"
-            src={signInUser.avatar || assets.profile_img}
+            src={signInUser?.avatar || assets?.profile_img}
             alt=""
           />
-          <div className="menu_msg_div s-msg-menu s-img-msg_menu">
-            <img
-              className={`send-img ${isZoom ? "send-img-zoom" : ""}`}
-              src={msg.img || assets.pic2}
-              alt=""
-              onClick={() => setIsZoom(!isZoom)}
-            />
-            <img
-              className="message-menu"
-              src={assets.menu_dots_icon}
-              alt=""
-              onClick={() => setIsShowMenu(!isShowMenu)}
-            />
+          <div className="s-ImgMenu-sect">
+            {/* ---- Message Image ---- */}
+            <ImgToShow imageUrl={msg?.img || assets.pic2} />
+
+            {/* ---- Message Menu Icon ---- */}
+            <div className="s-message-menu">
+              <img
+                src={assets.menu_icon_white}
+                alt=""
+                onClick={() => setIsShowMenu(!isShowMenu)}
+              />
+
+            {/* ---- Message Menu Dropdown ---- */}
             <div className={`menu-list ${!isShowMenu ? "dis-none" : ""}`}>
               <ul className="text-xs" onMouseLeave={() => setIsShowMenu(false)}>
                 <li onClick={deleteMsgHandler}>Delete</li>
               </ul>
             </div>
+            </div>
           </div>
-        </div>{" "}
+        </div>
+
+        {/* ---- Message Time Ago ---- */}
         <span className="chat-time">
           {formatDistanceToNow(new Date(timestamp))} ago
         </span>
