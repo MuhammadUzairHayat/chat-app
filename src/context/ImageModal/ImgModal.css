@@ -14,10 +14,12 @@
     z-index: 1000;
   }
   .modal-content {
-    top: 50px;
-    bottom: 50px;
-    right: auto;
-    left: auto;
+    overflow-y: scroll !important;
+    scrollbar-width: 20rem !important;
+    top: auto;
+    bottom:auto;
+    right: 20px;
+    left: 50px;
     background: white;
     border-radius: 10px;
     max-width: calc(100% - 100px); /* Ensures it fits within the screen */

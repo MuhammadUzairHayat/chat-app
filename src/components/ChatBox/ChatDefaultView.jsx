@@ -7,7 +7,7 @@ const ChatDefaultView = ({assets, setLSisVisible}) => {
       <img className="max-w-40 opacity-90" src={assets.logo_icon} alt="" />
       <h2 className="text-[#333]"> Welcome to Chat-App </h2>
       <p className="text-gray-400 text-xs text-center px-2">
-        App made by Unknown one Select User To Chat with him
+        App made by Muhammad Uzair Select User To Chat with him
       </p>
       <button
         onClick={() => setLSisVisible(prev=> !prev)}

@@ -34,7 +34,7 @@ const RightSidebar = ({ selectedFriend, setRSisVisible, RSisVisible }) => {
   }, [selectedFriend, chatsStatus, chats]);
 
   return (
-    <div className={"rs  " + (RSisVisible ? "rs-unhide " : "") + (RSisVisible ? "dis-none ": "")}>
+    <div className={`rs  ` + ` ${RSisVisible  ? 'rs-none' : ''}`}>
     
     {/* ---- RightSideBar Closing Toggle ---- */}
     <RS_CloseToggle assets={assets} setRSisVisible={setRSisVisible} />

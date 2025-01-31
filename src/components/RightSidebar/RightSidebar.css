@@ -154,12 +154,19 @@
 
 @media screen and (max-width: 780px) {
     
-    .rs-unhide {
+    .rs-hide {
         transform: translateX(25rem);
+        transition: all 0.5s; /* Apply animation */
+      }
+
+    .rs-none {
+        display: none;
+        transition-property: display;
+        transition-duration: 0.5s;
     }
+
     
     .rs {
-        /* display: none; */
         position: absolute;
         /* transform: translateX(16rem); */
         right: 0;

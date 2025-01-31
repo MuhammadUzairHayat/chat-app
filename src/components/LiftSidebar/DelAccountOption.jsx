@@ -29,7 +29,7 @@ const DelAccountOption = () => {
       <span
         className="flex gap-2 items-center"
         onClick={() =>
-          openModal("Confirm Password to Delete Account", handleDeleteAccount)
+          openModal("Confirm Password and Email to Delete Account", handleDeleteAccount)
         }
       >
         <DeleteForeverSharp />

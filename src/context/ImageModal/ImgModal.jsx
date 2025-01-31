@@ -1,7 +1,7 @@
 import React from "react";
-import { useImgModal } from "./imgModalContext";
 import './ImgModal.css'
 import assets from "../../assets/assets";
+import { useImgModal } from "./imgModalContext";
 
 const ImgModal = () => {
   const { modalData, hideModal } = useImgModal();
@@ -11,10 +11,10 @@ const ImgModal = () => {
   return (
     <div className="modal-overlay" onClick={hideModal}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <img src={modalData.image} alt="Zoomed In" className="modal-image" />
         <button className="modal-close" onClick={hideModal}>
           <img src={assets.cross_icon} alt="" />
         </button>
+        <img src={modalData.image} alt="Zoomed In" className="modal-image" />
       </div>
     </div>
   );
