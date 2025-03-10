@@ -22,7 +22,7 @@ const PasswordModal = () => {
         <input
           type="email"
           className="w-full border rounded-lg p-2 mb-4"
-          placeholder="Enter your password"
+          placeholder="Enter your Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
