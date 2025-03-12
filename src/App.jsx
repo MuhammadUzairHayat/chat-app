@@ -17,6 +17,7 @@ import Store from "./APP/Store";
 // import BookLoaderComponent from "./Pages/ProfileUpdate/Loader.jsx";
 import { AuthContext } from "./context/AuthContext.jsx";
 import { useMessageNotifications } from "./hooks/useMessageNotification.jsx";
+import VideoCheck from "./components/CheckComp/VideoCheck.jsx";
 // import { fetchUsers } from "./Features/userSlice";
 
 const App = () => {
@@ -61,6 +62,7 @@ const App = () => {
             <Route path="/" element={<PrivateRoutes user={user} />}>
               <Route index  element={<Chat user={user} />} />
               <Route path="profile" element={<ProfileUpdate loginUser={user} />} />
+              <Route path="video" element={<VideoCheck user={user} />} />
               {/* Other private routes here */}
             </Route>
 

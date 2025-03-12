@@ -26,7 +26,7 @@ const EachUserInfo = ({ eachUser }) => {
           // ---- Last Image Message ----
           <span className="flex gap-1">
             {" "}
-            <img className="w-3" src={assets.gallery_blue_icon} alt="" /> Photo
+            <img className="w-3" src={eachUser?.chats?.lastVideo ? assets.video_icon2 : assets.gallery_blue_icon} alt="" /> {eachUser?.chats?.lastVideo ? "Video" : "Photo"}
           </span>
         )}
       </p>

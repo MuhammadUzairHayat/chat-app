@@ -1,6 +1,7 @@
 import React from "react";
 import ReceiverMsg from "./ReceiverMsg";
 import ReceiverImage from "./ReceiverImage";
+import ReceiverVideo from "./ReceiverVideo";
 
 const ReceiverChatting = ({ receiver, msg, chatAbout }) => {
   return (
@@ -8,6 +9,12 @@ const ReceiverChatting = ({ receiver, msg, chatAbout }) => {
       {msg.type === "text" ? (
         // --- Receiver Text Message ----
         <ReceiverMsg
+          selectedFriend={receiver}
+          msg={msg}
+          chatAbout={chatAbout}
+        />
+      ) : msg.type === "video" ? (
+        <ReceiverVideo
           selectedFriend={receiver}
           msg={msg}
           chatAbout={chatAbout}

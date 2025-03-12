@@ -7,11 +7,13 @@ const RS_Media = ({ assets, chatAbout, chatMessages }) => {
     <div className="rs-media">
       <h4>Media</h4>
       <div className="rs-media-items">
-        {chatMessages && chatAbout.mediaCount !== 0 && chatAbout.mediaCount ? (
+        {chatMessages && Number(chatAbout.mediaCount) !== 0 && chatAbout.mediaCount ? (
+          // console.log(`chatMessages: `, chatMessages)
           // --- Rendering Each Media ----
           chatMessages.map((message, index) => {
-            return message.type === "image" && chatAbout.mediaCount ? (
-              <EachMedia key={index} message={message} />
+            console.log(`message type: `, message.type, "  message media count: ", chatAbout.mediaCount);
+            return message.type !== "text" && chatAbout.mediaCount ? (
+              <EachMedia key={index} message={message} type={message.type}/>
             ) : null;
           })
         ) : (

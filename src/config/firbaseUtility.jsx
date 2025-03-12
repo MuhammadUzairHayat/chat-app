@@ -11,6 +11,8 @@ import { auth, db } from "./firebase"; // Adjust the path as per your project st
 import { sendPasswordResetEmail } from "firebase/auth";
 import { toast } from "react-toastify";
 
+
+// ---- For generating Image Url ----
 export const getUploadFileURL = async (file) => {
   const formData = new FormData();
   formData.append("image", file);
@@ -31,6 +33,31 @@ export const getUploadFileURL = async (file) => {
   }
 };
 
+// ---- For generating Video Url ----
+export const uploadVideoToCloudinary = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "video_upload_preset"); // Use the upload preset name
+  formData.append("cloud_name", "dmbdp6irh"); // Replace with your Cloudinary cloud name
+
+  try {
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/dmbdp6irh/video/upload`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+    const data = await response.json();
+    console.log("Cloudinary Video URL:", data.secure_url);
+    return data.secure_url; // Return the video URL for use
+  } catch (error) {
+    console.error("Error uploading video:", error);
+  }
+};
+
+
+// ---- For updating User Profile ----
 export const updateUserProfile = async (user) => {
   console.log("updated user: ", user);
   try {
@@ -46,6 +73,7 @@ export const updateUserProfile = async (user) => {
   }
 };
 
+// ---- For fetching Messages ----
 export const getMessages = async (chatId) => {
   // console.log(`Chat id: `, chatId)
   try {
@@ -65,6 +93,7 @@ export const getMessages = async (chatId) => {
   }
 };
 
+// ---- For Deleting Messages ----
 export const deleteMessages = async (
   chatId,
   msgId,
@@ -106,6 +135,7 @@ export const deleteMessages = async (
 };
 
 
+//---- For Resetting Password ----
 export const resetPassword = async (email) => {
   try {
     await sendPasswordResetEmail(auth, email);

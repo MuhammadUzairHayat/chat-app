@@ -29,6 +29,7 @@ const ChatBox = ({
   LSisVisible,
   setRSisVisible,
 }) => {
+  
   // ---- Stored Data ----
   const { authUser } = useContext(AuthContext);
   const [receiver, setReceiver] = useState(null);

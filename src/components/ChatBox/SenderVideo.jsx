@@ -1,12 +1,12 @@
-import { formatDistanceToNow } from "date-fns";
-import React, { useEffect, useState } from "react";
-import { deleteMessages } from "../../config/firbaseUtility";
-import { fetchChats } from "../../Features/chatSlice";
-import { useDispatch } from "react-redux";
-import assets from "../../assets/assets";
-import ImgToShow from "../../context/ImageModal/ImgToShow";
+import React, { useEffect, useState } from 'react'
+import ImgToShow from '../../context/ImageModal/ImgToShow';
+import assets from '../../assets/assets';
+import { formatDistanceToNow } from 'date-fns';
+import { useDispatch } from 'react-redux';
+import { deleteMessages } from '../../config/firbaseUtility';
+import { fetchChats } from '../../Features/chatSlice';
 
-const SenderImage = ({ signInUser, msg, chatAbout }) => {
+const SenderVideo = ({signInUser, msg, chatAbout}) => {
   // ---- Stored Data ----
   const [timestamp, setTimestamp] = useState(msg.timestamp);
   const [isShowMenu, setIsShowMenu] = useState(false);
@@ -42,7 +42,7 @@ const SenderImage = ({ signInUser, msg, chatAbout }) => {
           />
           <div className="s-ImgMenu-sect">
             {/* ---- Message Image ---- */}
-            <ImgToShow imageurl={msg?.img || assets.pic2} type={msg.type} />
+            <ImgToShow imageurl={msg?.video || assets.video_uploaded} type={msg?.type} />
 
             {/* ---- Message Menu Icon ---- */}
             <div className="s-message-menu">
@@ -69,6 +69,6 @@ const SenderImage = ({ signInUser, msg, chatAbout }) => {
       </div>
     </div>
   );
-};
+}
 
-export default SenderImage;
+export default SenderVideo

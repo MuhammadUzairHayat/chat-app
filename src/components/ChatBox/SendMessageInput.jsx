@@ -1,65 +1,87 @@
 /* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useState } from "react";
 import assets from "../../assets/assets";
-import { getUploadFileURL } from "../../config/firbaseUtility";
+import { getUploadFileURL, uploadVideoToCloudinary } from "../../config/firbaseUtility";
 import { db } from "../../config/firebase";
-import { addDoc, collection, doc, increment, setDoc, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  increment,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { AuthContext } from "../../context/AuthContext";
 import { useDispatch, useSelector } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit";
 import { fetchChats } from "../../Features/chatSlice";
 import { fetchUsers } from "../../Features/userSlice";
+import { toast } from "react-toastify";
+import { set } from "react-hook-form";
 
 const SendMessageInput = ({
   selectedFriend,
   signInUser,
-  setSentMessage,
-  sentMessage,
 }) => {
-  const [receiver, setReceiver] = useState(null);
+  // const [receiver, setReceiver] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [img, setImg] = useState("");
   const [msg, setMsg] = useState("");
-  const [lastMessage, setLastMessage] = useState("");
+  const [video, setVideo] = useState("");
+  // const [lastMessage, setLastMessage] = useState("");
   const dispatch = useDispatch();
 
   // console.log(`SelectedFriend: `, selectedFriend.id);
   // console.log(`SignInUser: `, signInUser);
 
   const sendMessageHandler = async (e) => {
+    console.log("Sending message...");
     setIsLoading(true);
     e.preventDefault();
     const chatId = [signInUser?.id, selectedFriend?.id].sort().join("_");
     e.target.reset();
-    await setDoc(doc(db, "chats", chatId), {
-      participants: [signInUser.id, selectedFriend.id], // Replace with actual user IDs
-      lastMessage: img ? null : msg,
-      lastImg: img || null,
-      lastMessageTimestamp: Date.now(),
-      lastMessageId: null,
-      isGroup: false, // Adjust based on whether it’s a group chat
-    }, { merge: true }); 
+    await setDoc(
+      doc(db, "chats", chatId),
+      {
+        participants: [signInUser.id, selectedFriend.id], // Replace with actual user IDs
+        lastMessage: msg || null,
+        lastImg: img || null,
+        lastVideo: video || null,
+        lastMessageTimestamp: Date.now(),
+        lastMessageId: null,
+        isGroup: false, // Adjust based on whether it’s a group chat
+      },
+      { merge: true }
+    );
 
-    const newMessageRef = await addDoc(collection(db, "chats", chatId, "messages"), {
-      senderId: signInUser.id,
-      content: img ? null : msg,
-      timestamp: Date.now(),
-      type: img ? "image" : "text",
-      img: img || null
-    });
+    console.log("video url: ", video);
 
-    const newMessageId = newMessageRef.id; // Get the ID of the newly created message
-    console.log("New message ID:", newMessageId);
+    const newMessageRef = await addDoc(
+      collection(db, "chats", chatId, "messages"),
+      {
+        senderId: signInUser.id,
+        content: (img || video) ? null : msg,
+        timestamp: Date.now(),
+        type: img ? "image" : (video ? "video": "text"),
+        img: img || null,
+        video: video || null,
+      }
+    );
+
+    console.log("uploaded message: ", newMessageRef);
+
+    const lastMsgId = newMessageRef.id; // Get the ID of the newly created message
 
     await updateDoc(doc(db, "chats", chatId), {
-      lastMessageId: newMessageId,
+      lastMessageId: lastMsgId,
       [`unreadCount.${selectedFriend?.id}`]: increment(1),
-      mediaCount: img ? increment(1) : increment(0)
+      mediaCount: img  || video ? increment(1) : increment(0),
     });
 
     setImg("");
     setMsg("");
+    setVideo("");
     dispatch(fetchChats());
     setIsLoading(false);
   };
@@ -69,8 +91,15 @@ const SendMessageInput = ({
     setIsUploading(true);
     try {
       if (file) {
-        const fileURL = await getUploadFileURL(file);
-        setImg(fileURL);
+        if (file.type.startsWith("image/")) {
+          const imgURL = await getUploadFileURL(file);
+          setImg(imgURL);
+        } else if (file.type.startsWith("video/")) {
+          const videoURL = await uploadVideoToCloudinary(file);
+          setVideo(videoURL);
+        } else {
+          toast.error("Unsupported file type.");
+        }
       }
     } catch (error) {
       console.error("Error Occurred Making URL: ", error);
@@ -84,19 +113,23 @@ const SendMessageInput = ({
 
   return (
     <form onSubmit={sendMessageHandler} className="chat-send-input z-50">
-      {img ? (
-        <span className={`flex-1 ` + (img ? "cursor-not-allowed" : " ")}>
-          {" "}
+      {img || video ? (
+        <span
+          className={`flex-1 ` + (img || video ? "cursor-not-allowed" : " ")}
+        >
           <img
             className="max-w-5 absolute cursor-pointer"
-            onClick={() => setImg("")}
+            title="Remove"
+            onClick={() => img ? setImg(""): setVideo("")}
             src={assets.cross_icon}
             alt=""
-          />{" "}
-          <img
-            className="max-w-12 max-h-12 rounded-sm"
-            src={img || assets.avatar_icon}
           />
+          
+            <img
+              className="max-w-12 max-h-12 min-w-11 rounded-sm"
+              src={img ? img : (video ? assets.video_icon2 : assets.avatar_icon)}
+            />
+          
         </span>
       ) : (
         <input
@@ -111,7 +144,7 @@ const SendMessageInput = ({
         <input
           type="file"
           id="gallery"
-          accept=".png, .jpg, .jpeg"
+          accept=".png, .jpg, video/*"
           onChange={changeFileHandler}
           hidden
         />
@@ -128,10 +161,10 @@ const SendMessageInput = ({
       {isLoading ? (
         <div className="loader"></div>
       ) : (
-        <button className="flex-shrink-0" type="submit" disabled={!msg && !img}>
+        <button className="flex-shrink-0" type="submit" disabled={!msg && !img && !video}>
           <img
             className={`chat-send-icon ${
-              !msg && !img ? "opacity-60 cursor-no-drop" : "cursor-pointer"
+              !msg && !img && !video ? "opacity-60 cursor-no-drop" : "cursor-pointer"
             }`}
             src={assets.send_button}
             alt=""

@@ -1,12 +1,12 @@
-import { formatDistanceToNow } from "date-fns";
-import React, { useEffect, useState } from "react";
-import { deleteMessages } from "../../config/firbaseUtility";
-import { fetchChats } from "../../Features/chatSlice";
-import { useDispatch } from "react-redux";
-import assets from "../../assets/assets";
-import ImgToShow from "../../context/ImageModal/ImgToShow";
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { fetchChats } from '../../Features/chatSlice';
+import { deleteMessages } from '../../config/firbaseUtility';
+import assets from '../../assets/assets';
+import { formatDistanceToNow } from 'date-fns';
+import ImgToShow from '../../context/ImageModal/ImgToShow';
 
-const ReceiverImage = ({ selectedFriend, msg, chatAbout }) => {
+const ReceiverVideo = ({selectedFriend, msg, chatAbout}) => {
   // ---- Stored Data ----
   const [timestamp, setTimestamp] = useState(msg.timestamp);
   const [isShowMenu, setIsShowMenu] = useState(false);
@@ -41,27 +41,32 @@ const ReceiverImage = ({ selectedFriend, msg, chatAbout }) => {
           />
           <div className="r-ImgMenu-sect">
             {/* ---- Message Image ---- */}
-            <ImgToShow imageurl={msg?.img || assets.pic2} type={msg?.type} />
+            <ImgToShow
+              // className={`receive-img ${isZoom ? "receive-img-zoom" : ""}`}
+              imageurl={msg.video || assets.video_uploaded}
+              // alt=""
+              // onClick={() => setIsZoom(!isZoom)}
+            />
 
             {/* --- Message Menu Icon ---- */}
             <div className="r-message-menu">
-              <img
-                onClick={() => setIsShowMenu(!isShowMenu)}
-                src={assets.menu_icon_white}
-                alt=""
-                imageurl={assets}
-              />
+            <img
+             onClick={() => setIsShowMenu(!isShowMenu)}
+              src={assets.menu_icon_white}
+              alt=""
+              imageurl={assets}
+            />
 
-              {/* ---- Message Menu Dropdown ---- */}
-              <div
-                className={`menu-list left-[100%] ${
-                  !isShowMenu ? "dis-none" : ""
-                }`}
-              >
-                <ul onMouseLeave={() => setIsShowMenu(false)}>
-                  <li onClick={deleteMsgHandler}>Delete</li>
-                </ul>
-              </div>
+            {/* ---- Message Menu Dropdown ---- */}
+            <div
+              className={`menu-list left-[100%] ${
+                !isShowMenu ? "dis-none" : ""
+              }`}
+            >
+              <ul onMouseLeave={() => setIsShowMenu(false)}>
+                <li onClick={deleteMsgHandler}>Delete</li>
+              </ul>
+            </div>
             </div>
           </div>
         </div>
@@ -73,6 +78,6 @@ const ReceiverImage = ({ selectedFriend, msg, chatAbout }) => {
       </div>
     </div>
   );
-};
+}
 
-export default ReceiverImage;
+export default ReceiverVideo

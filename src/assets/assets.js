@@ -28,6 +28,9 @@ import media_icon from './media_icon.png'
 import media_icon2 from './icons8-media-100.png'
 import menu_icon_blue from './menu-icon-blue.png'
 import menu_icon_white from './menu-icon-white.png'
+import video_icon from './icons8-video-24.png'
+import video_uploaded from './uploaded-video.mp4'
+import video_icon2 from './video_icon2.png'
 
 const assets = {
     avatar_icon,
@@ -59,7 +62,10 @@ const assets = {
     media_icon,
     media_icon2,
     menu_icon_blue,
-    menu_icon_white
+    menu_icon_white,
+    video_icon,
+    video_uploaded,
+    video_icon2
 }
 
 export default assets;
